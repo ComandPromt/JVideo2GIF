@@ -64,7 +64,7 @@ public class DisplayFrame extends JFrame {
 
 	private JPanel contentPane;
 
-	EmbeddedMediaPlayerComponent playerComponent;
+	private EmbeddedMediaPlayerComponent playerComponent;
 
 	public static String nombreVideo;
 
@@ -126,9 +126,9 @@ public class DisplayFrame extends JFrame {
 
 	public static String[] config;
 
-	static long contador;
+	private static long contador;
 
-	String path;
+	private String path;
 
 	private JSeparator separator_2;
 
@@ -148,7 +148,7 @@ public class DisplayFrame extends JFrame {
 
 	private JCheckBoxCustom hq;
 
-	JFfmpeg utilidad;
+	private JFfmpeg utilidad;
 
 	private Spinner fps;
 
@@ -157,9 +157,13 @@ public class DisplayFrame extends JFrame {
 	private JSeparator separator_6;
 
 	private static Spinner ancho;
+
 	private JButton btnNewButton_5;
+
 	private JSeparator separator_7;
+
 	private JButton btnNewButton_6;
+
 	private DragAndDrop panel_1;
 
 	private void ponerTiempo(boolean primerTiempo) {
@@ -537,6 +541,8 @@ public class DisplayFrame extends JFrame {
 
 					try {
 
+						btnNewButton_4.setEnabled(false);
+
 						String archivo = JVideoPlayer.getListView().getMap()
 								.get(JVideoPlayer.getFrame().getMediaPlayer().getMediaMetaData().getTitle());
 
@@ -582,13 +588,17 @@ public class DisplayFrame extends JFrame {
 
 						utilidad.jffmpeg(comandos);
 
+						btnNewButton_4.setEnabled(true);
+
 					}
 
 					catch (Exception e1) {
 					}
 
 				}
+
 			}
+
 		});
 
 		hq = new JCheckBoxCustom("jCheckBoxCustom1", SwingConstants.LEFT);
