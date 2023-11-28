@@ -1,6 +1,7 @@
 package com.main;
 
 import java.awt.EventQueue;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
@@ -81,6 +82,12 @@ public class JVideoPlayer {
 				try {
 
 					frame = new DisplayFrame();
+					frame.getPlayComponent().getVideoSurface().addMouseListener(new MouseAdapter() {
+						@Override
+						public void mousePressed(MouseEvent e) {
+							System.out.println("aaa");
+						}
+					});
 
 					frame.setVisible(true);
 

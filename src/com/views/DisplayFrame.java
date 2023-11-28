@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -38,8 +39,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.buttons.simple.SimpleButton;
 import com.file.nativ.chooser.DemoJavaFxStage;
 import com.main.JVideoPlayer;
+import com.main.VideoViewer;
 import com.play_list.PlayListFrame;
 import com.slider.tipo2.JsliderCustom;
 import com.spinner.decimal.DecimalSpinner;
@@ -165,6 +168,24 @@ public class DisplayFrame extends JFrame {
 	private JButton btnNewButton_6;
 
 	private DragAndDrop panel_1;
+
+	private SimpleButton btnNewButton_7;
+
+	private JSeparator separator_8;
+
+	private VideoViewer ventanaCrop;
+
+	private Point crop;
+
+	private Point cropSize;
+
+	public void setCrop(Point crop) {
+		this.crop = crop;
+	}
+
+	public void setCropSize(Point cropSize) {
+		this.cropSize = cropSize;
+	}
 
 	private void ponerTiempo(boolean primerTiempo) {
 
@@ -307,6 +328,8 @@ public class DisplayFrame extends JFrame {
 		addVideo();
 
 	}
+
+	private DisplayFrame frame;
 
 	public DisplayFrame() throws TooManyListenersException {
 
@@ -474,35 +497,53 @@ public class DisplayFrame extends JFrame {
 
 			}
 		});
+
 		btnNewButton_2.setContentAreaFilled(false);
 
 		btnNewButton_2.setBorder(null);
+
 		btnNewButton_2.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/time_1.png")));
 
 		btnNewButton_2.setBackground(Color.WHITE);
+
 		menuBar.add(btnNewButton_2);
 
 		time1 = new DecimalSpinner();
+
 		time1.setForeground(Color.WHITE);
+
 		time1.setBackground(Color.WHITE);
+
 		menuBar.add(time1);
 
 		separator_2 = new JSeparator();
+
 		separator_2.setForeground(Color.WHITE);
+
 		separator_2.setBackground(Color.WHITE);
+
 		menuBar.add(separator_2);
 
 		btnNewButton_3 = new JButton("");
+
 		btnNewButton_3.addMouseListener(new MouseAdapter() {
+
 			@Override
+
 			public void mousePressed(MouseEvent e) {
+
 				ponerTiempo(false);
 
 			}
+
 		});
+
 		btnNewButton_3.setContentAreaFilled(false);
+
 		btnNewButton_3.setBorder(null);
+
 		btnNewButton_3.setBackground(Color.WHITE);
+
 		btnNewButton_3.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/time_2.png")));
 
 		menuBar.add(btnNewButton_3);
@@ -524,17 +565,27 @@ public class DisplayFrame extends JFrame {
 		menuBar.add(time2);
 
 		separator_3 = new JSeparator();
+
 		separator_3.setForeground(Color.WHITE);
+
 		separator_3.setBackground(Color.WHITE);
+
 		menuBar.add(separator_3);
 
 		btnNewButton_4 = new JButton("Convert");
+
 		btnNewButton_4.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
 		btnNewButton_4.setContentAreaFilled(false);
+
 		btnNewButton_4.setBorder(null);
+
 		btnNewButton_4.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/video_2_frame.png")));
+
 		btnNewButton_4.addActionListener(new ActionListener() {
+
 			@Override
+
 			public void actionPerformed(ActionEvent e) {
 
 				if (time2.getValor() > 0f) {
@@ -546,7 +597,7 @@ public class DisplayFrame extends JFrame {
 						String archivo = JVideoPlayer.getListView().getMap()
 								.get(JVideoPlayer.getFrame().getMediaPlayer().getMediaMetaData().getTitle());
 
-						String[] comandos = new String[13];
+						String[] comandos = new String[12];
 
 						comandos[0] = "-i";
 
@@ -564,25 +615,33 @@ public class DisplayFrame extends JFrame {
 
 						comandos[7] = Integer.toString(fps.getValor());
 
-						comandos[8] = "-width";
+						// comandos[6] = "-width";
 
-						comandos[9] = Integer.toString(ancho.getValor());
+						// comandos[7] = Integer.toString(ancho.getValor());
 
 						if (hq.isSelected()) {
 
-							comandos[10] = "-good";
+							// comandos[10] = "-good";
 						}
 
 						else {
 
-							comandos[10] = "-bad";
+							// comandos[10] = "-bad";
 
 						}
 
-						comandos[11] = "-y";
+						comandos[8] = "-vf";
 
-						comandos[12] = archivo.substring(0, archivo.lastIndexOf(".")) + "_" + Metodos.saberFechaActual()
+						comandos[9] = "\"crop=" + cropSize.x + ":" + cropSize.y + ":" + crop.x + ":" + crop.y + "\"";
+
+						comandos[10] = "-y";
+
+						comandos[11] = archivo.substring(0, archivo.lastIndexOf(".")) + "_" + Metodos.saberFechaActual()
 								+ ".gif";
+
+						for (int i = 0; i < comandos.length; i++) {
+							System.out.println(comandos[i]);
+						}
 
 						utilidad = new JFfmpeg();
 
@@ -593,6 +652,7 @@ public class DisplayFrame extends JFrame {
 					}
 
 					catch (Exception e1) {
+						e1.printStackTrace();
 					}
 
 				}
@@ -602,6 +662,7 @@ public class DisplayFrame extends JFrame {
 		});
 
 		hq = new JCheckBoxCustom("jCheckBoxCustom1", SwingConstants.LEFT);
+
 		hq.setSelected(true);
 
 		hq.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -674,13 +735,47 @@ public class DisplayFrame extends JFrame {
 		menuBar.add(btnNewButton_5);
 
 		separator_7 = new JSeparator();
+
 		separator_7.setForeground(Color.WHITE);
+
 		menuBar.add(separator_7);
 
 		menuBar.add(hq);
 
+		separator_8 = new JSeparator();
+
+		separator_8.setForeground(Color.WHITE);
+
+		menuBar.add(separator_8);
+
+		btnNewButton_7 = new SimpleButton("Crop");
+
+		btnNewButton_7.setBorderColor(Color.WHITE);
+
+		btnNewButton_7.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				if (!(ventanaCrop instanceof VideoViewer)) {
+
+					ventanaCrop = new VideoViewer(frame);
+
+					ventanaCrop.setVisible(true);
+
+				}
+
+			}
+
+		});
+
+		btnNewButton_7.setFont(new Font("Dialog", Font.PLAIN, 20));
+
+		menuBar.add(btnNewButton_7);
+
 		separator_6 = new JSeparator();
+
 		separator_6.setForeground(Color.WHITE);
+
 		menuBar.add(separator_6);
 
 		menuBar.add(btnNewButton_4);
@@ -1187,6 +1282,8 @@ public class DisplayFrame extends JFrame {
 		totalLabel.setBackground(Color.WHITE);
 
 		progressTimePanel.add(totalLabel, BorderLayout.EAST);
+
+		frame = this;
 
 	}
 
