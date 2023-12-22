@@ -23,9 +23,9 @@ import com.views.DisplayFrame;
 import com.views.MyLogo;
 import com.views.VideoTime;
 
+import mthos.JMthos;
 import uk.co.caprica.vlcj.player.embedded.DefaultAdaptiveRuntimeFullScreenStrategy;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
-import util.Mthos;
 
 public class JVideoPlayer {
 
@@ -69,7 +69,7 @@ public class JVideoPlayer {
 
 		listHistory = new ListHistory();
 
-		filePath = new File(".").getCanonicalPath() + Mthos.saberSeparador() + "lib" + Mthos.saberSeparador() + "VLC";
+		filePath = new File(".").getCanonicalPath() + JMthos.saberSeparador() + "lib" + JMthos.saberSeparador() + "VLC";
 
 		NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(), filePath);
 
@@ -240,8 +240,8 @@ public class JVideoPlayer {
 
 				for (int i = 0; i < lista.size(); i++) {
 
-					listaVideos = (LinkedList<String>) Mthos
-							.directorio(lista.get(i).getAbsolutePath() + Mthos.saberSeparador(), "videos", false);
+					listaVideos = (LinkedList<String>) JMthos
+							.listar(lista.get(i).getAbsolutePath() + JMthos.saberSeparador(), "videos", false, true);
 
 					for (int y = 0; y < listaVideos.size(); y++) {
 
@@ -249,7 +249,7 @@ public class JVideoPlayer {
 
 						addHistory(
 								listaVideos.get(y)
-										.substring(listaVideos.get(y).lastIndexOf(Mthos.saberSeparador()) + 1),
+										.substring(listaVideos.get(y).lastIndexOf(JMthos.saberSeparador()) + 1),
 								listaVideos.get(y));
 
 					}
@@ -261,7 +261,7 @@ public class JVideoPlayer {
 					lista.remove(0);
 
 					DisplayFrame.nombreVideo = listaVideos.get(0)
-							.substring(listaVideos.get(0).lastIndexOf(Mthos.saberSeparador()) + 1);
+							.substring(listaVideos.get(0).lastIndexOf(JMthos.saberSeparador()) + 1);
 
 				}
 

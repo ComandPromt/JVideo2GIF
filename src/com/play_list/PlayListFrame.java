@@ -32,14 +32,12 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.dialog.confirm.MessageDialog;
+import com.draganddrop.DragAndDrop;
+import com.draganddrop.UtilDragAndDrop;
 import com.history.ListHistory;
 import com.main.JVideoPlayer;
 import com.util.Metodos;
-import com.views.DisplayFrame;
-
-import diaglog.MessageDialog;
-import drag_and_drop.DragAndDrop;
-import drag_and_drop.UtilDragAndDrop;
 
 public class PlayListFrame extends JFrame {
 
@@ -316,8 +314,6 @@ public class PlayListFrame extends JFrame {
 
 					getScrollPane().setViewportView(getList());
 
-					DisplayFrame.ponerAncho(true);
-
 				}
 
 			}
@@ -404,7 +400,7 @@ public class PlayListFrame extends JFrame {
 
 		panel_1.add(historyClearButton);
 
-		DragAndDrop btnNewButton = new DragAndDrop("", "");
+		DragAndDrop btnNewButton = new DragAndDrop("");
 
 		btnNewButton.setText("Drag And Drop Here");
 
@@ -442,9 +438,8 @@ public class PlayListFrame extends JFrame {
 
 	protected void jButton1ActionPerformed(ActionEvent e) {
 
-		MessageDialog obj = new MessageDialog(this);
-
-		obj.showMessage("Are You Sure To Clear History?", "");
+		MessageDialog obj = new MessageDialog(null, null, "Clear History", "Are You Sure To Clear History?", null,
+				null);
 
 		if (obj.getMessageType() == MessageDialog.MessageType.OK) {
 

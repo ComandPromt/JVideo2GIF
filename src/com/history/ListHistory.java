@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import util.Mthos;
+import mthos.JMthos;
 
 public class ListHistory {
 
@@ -23,10 +23,10 @@ public class ListHistory {
 
 		try {
 
-			path1 = new File(".").getCanonicalPath() + Mthos.saberSeparador() + "log" + Mthos.saberSeparador()
+			path1 = new File(".").getCanonicalPath() + JMthos.saberSeparador() + "log" + JMthos.saberSeparador()
 					+ "output.txt";
 
-			path2 = new File(".").getCanonicalPath() + Mthos.saberSeparador() + "log" + Mthos.saberSeparador()
+			path2 = new File(".").getCanonicalPath() + JMthos.saberSeparador() + "log" + JMthos.saberSeparador()
 					+ "output1.txt";
 
 		}

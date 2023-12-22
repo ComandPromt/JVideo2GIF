@@ -40,26 +40,23 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.buttons.simple.SimpleButton;
+import com.checkbox.CheckBoxCustom;
+import com.draganddrop.DragAndDrop;
+import com.draganddrop.UtilDragAndDrop;
 import com.file.nativ.chooser.DemoJavaFxStage;
 import com.main.JVideoPlayer;
 import com.main.VideoViewer;
 import com.play_list.PlayListFrame;
-import com.slider.tipo2.JsliderCustom;
+import com.progressBar.ProgressBarCustom;
+import com.slider.JSliderCustom;
 import com.spinner.decimal.DecimalSpinner;
 import com.spinner.simple.Spinner;
 import com.util.Metodos;
 
-import checkbox.JCheckBoxCustom;
-import drag_and_drop.DragAndDrop;
-import drag_and_drop.UtilDragAndDrop;
 import main.JFfmpeg;
-import net.bramp.ffmpeg.FFprobe;
-import net.bramp.ffmpeg.probe.FFmpegProbeResult;
-import net.bramp.ffmpeg.probe.FFmpegStream;
-import progressbar.ProgressBarCustom;
+import mthos.JMthos;
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
 import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
-import util.Mthos;
 
 @SuppressWarnings("serial")
 
@@ -81,7 +78,7 @@ public class DisplayFrame extends JFrame {
 
 	private ProgressBarCustom progressBar;
 
-	private JsliderCustom volumControlerSlider;
+	private JSliderCustom volumControlerSlider;
 
 	private JMenuBar menuBar;
 
@@ -149,19 +146,13 @@ public class DisplayFrame extends JFrame {
 
 	private JButton btnNewButton_4;
 
-	private JCheckBoxCustom hq;
+	private CheckBoxCustom hq;
 
 	private JFfmpeg utilidad;
 
 	private Spinner fps;
 
-	private JSeparator separator_5;
-
 	private JSeparator separator_6;
-
-	private static Spinner ancho;
-
-	private JButton btnNewButton_5;
 
 	private JSeparator separator_7;
 
@@ -249,8 +240,6 @@ public class DisplayFrame extends JFrame {
 
 			ControlFrame.playButton.setIcon(new ImageIcon(JVideoPlayer.class.getResource("/images/pause.png")));
 
-			ponerAncho(true);
-
 		}
 
 		catch (Exception e) {
@@ -258,30 +247,6 @@ public class DisplayFrame extends JFrame {
 		}
 
 		JVideoPlayer.play();
-
-	}
-
-	public static void ponerAncho(boolean filtro) {
-
-		try {
-
-			if (!filtro || ancho.getValor() == 0) {
-
-				FFprobe ffprobe = new FFprobe();
-
-				FFmpegProbeResult probeResult = ffprobe.probe(JVideoPlayer.getListView().getMap()
-						.get(JVideoPlayer.getFrame().getMediaPlayer().getMediaMetaData().getTitle()));
-
-				FFmpegStream stream = probeResult.getStreams().get(0);
-
-				ancho.setValor(stream.width);
-
-			}
-
-		}
-
-		catch (Exception e) {
-		}
 
 	}
 
@@ -369,13 +334,13 @@ public class DisplayFrame extends JFrame {
 
 			}
 
-			path = new File(".").getCanonicalPath() + Mthos.saberSeparador() + "screenshots";
+			path = new File(".").getCanonicalPath() + JMthos.saberSeparador() + "screenshots";
 
 			if (config[1] != null) {
 
 				path = config[1];
 
-				contador = Mthos.listarFicherosPorCarpeta(path, "jpg") + 1;
+				contador = JMthos.listarFicherosPorCarpeta(path, "jpg") + 1;
 
 			}
 
@@ -643,9 +608,7 @@ public class DisplayFrame extends JFrame {
 							System.out.println(comandos[i]);
 						}
 
-						utilidad = new JFfmpeg();
-
-						utilidad.jffmpeg(comandos);
+						utilidad = new JFfmpeg(comandos, true);
 
 						btnNewButton_4.setEnabled(true);
 
@@ -661,7 +624,7 @@ public class DisplayFrame extends JFrame {
 
 		});
 
-		hq = new JCheckBoxCustom("jCheckBoxCustom1", SwingConstants.LEFT);
+		hq = new CheckBoxCustom("jCheckBoxCustom1", SwingConstants.LEFT);
 
 		hq.setSelected(true);
 
@@ -700,39 +663,6 @@ public class DisplayFrame extends JFrame {
 		btnNewButton_6.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/reload.png")));
 
 		menuBar.add(btnNewButton_6);
-
-		separator_5 = new JSeparator();
-		separator_5.setForeground(Color.WHITE);
-		menuBar.add(separator_5);
-
-		ancho = new Spinner();
-
-		ancho.setToolTipText("Width");
-
-		ancho.setLabelText("Width");
-
-		menuBar.add(ancho);
-
-		btnNewButton_5 = new JButton("");
-
-		btnNewButton_5.setContentAreaFilled(false);
-
-		btnNewButton_5.setBorder(null);
-
-		btnNewButton_5.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/reload.png")));
-
-		btnNewButton_5.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				ponerAncho(false);
-
-			}
-
-		});
-
-		menuBar.add(btnNewButton_5);
 
 		separator_7 = new JSeparator();
 
@@ -956,7 +886,7 @@ public class DisplayFrame extends JFrame {
 
 		controlPanel.add(playButton);
 
-		volumControlerSlider = new JsliderCustom();
+		volumControlerSlider = new JSliderCustom();
 
 		volumControlerSlider.setForeground(new Color(115, 118, 120));
 
@@ -1132,7 +1062,7 @@ public class DisplayFrame extends JFrame {
 						}
 
 						ImageIO.write(Image, "jpg",
-								new File(carpeta + Mthos.saberSeparador() + nombreVideo + "_" + contador + ".jpg"));
+								new File(carpeta + JMthos.saberSeparador() + nombreVideo + "_" + contador + ".jpg"));
 
 					}
 
@@ -1223,7 +1153,7 @@ public class DisplayFrame extends JFrame {
 
 		});
 
-		panel_1 = new DragAndDrop("", "");
+		panel_1 = new DragAndDrop("");
 
 		panel_1.setText("Drag And Drop Here");
 
@@ -1251,7 +1181,7 @@ public class DisplayFrame extends JFrame {
 
 		progressTimePanel.setLayout(new BorderLayout(0, 0));
 
-		progressBar = new ProgressBarCustom(false);
+		progressBar = new ProgressBarCustom();
 
 		progressBar.setBackground(Color.WHITE);
 

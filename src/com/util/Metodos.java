@@ -4,7 +4,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import util.Mthos;
+import mthos.JMthos;
 
 public class Metodos {
 
@@ -45,7 +45,7 @@ public class Metodos {
 
 		try {
 
-			String ruta = new File(".").getCanonicalPath() + Mthos.saberSeparador() + "log";
+			String ruta = new File(".").getCanonicalPath() + JMthos.saberSeparador() + "log";
 
 			File dir = new File(ruta);
 
@@ -55,7 +55,7 @@ public class Metodos {
 
 			}
 
-			File file = new File(ruta + Mthos.saberSeparador() + "output.txt");
+			File file = new File(ruta + JMthos.saberSeparador() + "output.txt");
 
 			if (!file.exists()) {
 
@@ -63,7 +63,7 @@ public class Metodos {
 
 			}
 
-			file = new File(ruta + Mthos.saberSeparador() + "output1.txt");
+			file = new File(ruta + JMthos.saberSeparador() + "output1.txt");
 
 			if (!file.exists()) {
 

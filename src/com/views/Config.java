@@ -2,6 +2,7 @@ package com.views;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,14 +14,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedList;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
@@ -126,6 +125,7 @@ public class Config extends javax.swing.JFrame {
 		setResizable(false);
 
 		JButton btnNewButton = new JButton("");
+		btnNewButton.setBounds(345, 196, 33, 33);
 
 		btnNewButton.setContentAreaFilled(false);
 
@@ -162,30 +162,35 @@ public class Config extends javax.swing.JFrame {
 		});
 
 		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setBounds(19, 49, 32, 50);
 
 		lblNewLabel.setBackground(Color.WHITE);
 
 		lblNewLabel.setIcon(new ImageIcon(Config.class.getResource("/images/sound.png")));
 
 		volumen = new Spinner();
+		volumen.setBounds(61, 49, 55, 50);
 
 		volumen.setMaxValor(120);
 
 		volumen.setMinValor(0);
 
 		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setBounds(215, 51, 32, 33);
 
 		lblNewLabel_1.setBackground(Color.WHITE);
 
 		lblNewLabel_1.setIcon(new ImageIcon(Config.class.getResource("/images/photo.png")));
 
 		ruta = new JTextField();
+		ruta.setBounds(257, 51, 127, 33);
 
 		ruta.setBackground(Color.WHITE);
 
 		ruta.setColumns(10);
 
 		JButton btnNewButton_1 = new JButton("");
+		btnNewButton_1.setBounds(61, 196, 34, 33);
 
 		btnNewButton_1.setContentAreaFilled(false);
 
@@ -231,6 +236,7 @@ public class Config extends javax.swing.JFrame {
 		btnNewButton_1.setIcon(new ImageIcon(Config.class.getResource("/images/abrir.png")));
 
 		JButton btnNewButton_2 = new JButton("");
+		btnNewButton_2.setBounds(248, 196, 33, 33);
 
 		btnNewButton_2.addActionListener(new ActionListener() {
 
@@ -262,43 +268,26 @@ public class Config extends javax.swing.JFrame {
 
 		btnNewButton_2.setIcon(new ImageIcon(Config.class.getResource("/images/folder.png")));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup()
-						.addGroup(layout.createParallelGroup(Alignment.LEADING).addGroup(layout.createSequentialGroup()
-								.addGap(19).addComponent(lblNewLabel).addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(volumen, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED).addComponent(lblNewLabel_1)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(ruta, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 34,
-										GroupLayout.PREFERRED_SIZE)
-								.addGap(6).addComponent(btnNewButton_2))
-								.addGroup(layout.createSequentialGroup().addGap(184).addComponent(btnNewButton)))
-						.addContainerGap(34, Short.MAX_VALUE)));
-		layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addGap(38)
-						.addGroup(layout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(ruta, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-								.addComponent(lblNewLabel_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)
-								.addComponent(btnNewButton_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE))
-						.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE).addComponent(btnNewButton)
-						.addGap(19))
-				.addGroup(layout.createSequentialGroup().addGap(30)
-						.addComponent(volumen, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE,
-								GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(69, Short.MAX_VALUE))
-				.addGroup(layout.createSequentialGroup().addGap(40).addComponent(lblNewLabel).addContainerGap(77,
-						Short.MAX_VALUE)));
+		JLabel lblNewLabel_2 = new JLabel("Volumen por defecto");
+		lblNewLabel_2.setBounds(10, 3, 182, 26);
+		lblNewLabel_2.setFont(new Font("Dialog", Font.PLAIN, 20));
+		getContentPane().setLayout(null);
+		getContentPane().add(lblNewLabel);
+		getContentPane().add(volumen);
+		getContentPane().add(lblNewLabel_1);
+		getContentPane().add(ruta);
+		getContentPane().add(btnNewButton_1);
+		getContentPane().add(btnNewButton_2);
+		getContentPane().add(lblNewLabel_2);
+		getContentPane().add(btnNewButton);
 
-		getContentPane().setLayout(layout);
+		JLabel lblNewLabel_3 = new JLabel("Guardado");
+		lblNewLabel_3.setFont(new Font("Dialog", Font.PLAIN, 20));
+		lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_3.setBounds(215, 0, 164, 33);
+		getContentPane().add(lblNewLabel_3);
 
-		setSize(new Dimension(424, 188));
+		setSize(new Dimension(560, 386));
 
 		setLocationRelativeTo(null);
 
@@ -311,5 +300,4 @@ public class Config extends javax.swing.JFrame {
 	public void stateChanged(ChangeEvent e) {
 
 	}
-
 }

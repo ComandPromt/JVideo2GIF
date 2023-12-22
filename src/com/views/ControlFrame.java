@@ -20,7 +20,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.main.JVideoPlayer;
-import com.slider.tipo2.JsliderCustom;
+import com.slider.JSliderCustom;
 
 @SuppressWarnings("serial")
 public class ControlFrame extends JFrame {
@@ -209,7 +209,7 @@ public class ControlFrame extends JFrame {
 
 		panel.add(smallButton);
 
-		volumControlerSlider = new JsliderCustom();
+		volumControlerSlider = new JSliderCustom();
 
 		volumControlerSlider.setForeground(new Color(115, 118, 120));
 

@@ -4,17 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-import org.jcodec.api.JCodecException;
 
 import com.views.DisplayFrame;
 
@@ -32,20 +26,6 @@ public class VideoViewer extends JFrame {
 
 		JPanel controlPanel = new JPanel();
 		JButton openButton = new JButton("Open Video");
-		openButton.addActionListener(e -> {
-			JFileChooser fileChooser = new JFileChooser();
-			int returnVal = fileChooser.showOpenDialog(VideoViewer.this);
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				File file = fileChooser.getSelectedFile();
-				try {
-					videoPanel.loadVideo(file);
-				} catch (IOException | JCodecException ex) {
-					ex.printStackTrace();
-					JOptionPane.showMessageDialog(VideoViewer.this, "Error loading video file", "Error",
-							JOptionPane.ERROR_MESSAGE);
-				}
-			}
-		});
 
 		controlPanel.add(openButton);
 
@@ -77,6 +57,15 @@ public class VideoViewer extends JFrame {
 		getContentPane().add(infoPanel, BorderLayout.SOUTH);
 
 		videoPanel.setTimeLabel(timeLabel);
+
+		// File file = fileChooser.getSelectedFile();
+//		try {
+//			videoPanel.loadVideo(file);
+//		} catch (IOException | JCodecException ex) {
+//			ex.printStackTrace();
+//			JOptionPane.showMessageDialog(VideoViewer.this, "Error loading video file", "Error",
+//					JOptionPane.ERROR_MESSAGE);
+//		}
 
 		setVisible(true);
 

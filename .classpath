@@ -14,15 +14,16 @@
 	<classpathentry kind="lib" path="src/lib/NefAnimacion_V2.1_jdk18.jar"/>
 	<classpathentry kind="lib" path="src/lib/swingx-1.6.1.jar"/>
 	<classpathentry kind="lib" path="src/lib/TimingFramework-0.55.jar"/>
-	<classpathentry kind="lib" path="src/lib/lib_material_swing.jar"/>
 	<classpathentry kind="lib" path="src/lib/NativeFileChooser.jar"/>
 	<classpathentry kind="lib" path="src/lib/ffmpeg-0.7.0.jar"/>
 	<classpathentry kind="lib" path="src/lib/guava-31.1-jre.jar"/>
 	<classpathentry kind="lib" path="src/lib/commons-lang3-3.12.0.jar"/>
 	<classpathentry kind="lib" path="src/lib/gson-2.10.1.jar"/>
-	<classpathentry kind="lib" path="src/lib/JFfmeg.jar"/>
 	<classpathentry kind="lib" path="src/lib/jcodec-0.2.0.jar"/>
 	<classpathentry kind="lib" path="src/lib/jcodec-javase-0.2.0.jar"/>
 	<classpathentry kind="lib" path="src/lib/xuggle-xuggler-5.4.jar"/>
+	<classpathentry kind="lib" path="src/lib/JFfmpeg.jar"/>
+	<classpathentry kind="lib" path="src/lib/JMthos.jar"/>
+	<classpathentry kind="lib" path="src/lib/MaterialLib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
