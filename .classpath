@@ -1,29 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="test" value="true"/>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
+		<attributes>
+			<attribute name="test" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="optional" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
 			<attribute name="module" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="src/lib/jna-3.5.2.jar"/>
-	<classpathentry kind="lib" path="src/lib/platform-3.5.2.jar"/>
-	<classpathentry kind="lib" path="src/lib/slf4j-api-1.7.12.jar"/>
-	<classpathentry kind="lib" path="src/lib/slf4j-simple-1.7.12.jar"/>
-	<classpathentry kind="lib" path="src/lib/vlcj-3.8.0.jar"/>
-	<classpathentry kind="lib" path="src/lib/NefAnimacion_V2.1_jdk18.jar"/>
-	<classpathentry kind="lib" path="src/lib/swingx-1.6.1.jar"/>
-	<classpathentry kind="lib" path="src/lib/TimingFramework-0.55.jar"/>
-	<classpathentry kind="lib" path="src/lib/NativeFileChooser.jar"/>
-	<classpathentry kind="lib" path="src/lib/ffmpeg-0.7.0.jar"/>
-	<classpathentry kind="lib" path="src/lib/guava-31.1-jre.jar"/>
-	<classpathentry kind="lib" path="src/lib/commons-lang3-3.12.0.jar"/>
-	<classpathentry kind="lib" path="src/lib/gson-2.10.1.jar"/>
-	<classpathentry kind="lib" path="src/lib/jcodec-0.2.0.jar"/>
-	<classpathentry kind="lib" path="src/lib/jcodec-javase-0.2.0.jar"/>
-	<classpathentry kind="lib" path="src/lib/xuggle-xuggler-5.4.jar"/>
-	<classpathentry kind="lib" path="src/lib/JFfmpeg.jar"/>
-	<classpathentry kind="lib" path="src/lib/JMthos.jar"/>
-	<classpathentry kind="lib" path="src/lib/MaterialLib.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="src/main/java/lib/commons-lang3-3.12.0.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/ffmpeg-0.7.0.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/gson-2.10.1.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/guava-31.1-jre.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/jcodec-0.2.0.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/jcodec-javase-0.2.0.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/JFfmpeg.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/JMthos.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/jna-3.5.2.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/miglayout-4.0.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/NativeFileChooser.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/NefAnimacion_V2.1_jdk18.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/platform-3.5.2.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/slf4j-api-1.7.12.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/slf4j-simple-1.7.12.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/swingx-1.6.1.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/TimingFramework-0.55.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/vlcj-3.8.0.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/xuggle-xuggler-5.4.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/JMaterial.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/lib_colour_picker.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/JSimpleIcons.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
