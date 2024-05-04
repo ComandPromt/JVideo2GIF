@@ -39,17 +39,16 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.buttons.simple.SimpleButton;
+import com.buttons.round.NButton;
 import com.draganddrop.DragAndDrop;
 import com.draganddrop.UtilDragAndDrop;
 import com.file.nativ.chooser.DemoJavaFxStage;
 import com.main.JVideoPlayer;
+import com.main.VideoPanel;
 import com.main.VideoViewer;
 import com.play_list.PlayListFrame;
 import com.progressBar.ProgressBarCustom;
 import com.slider.JSliderCustom;
-import com.spinner.decimal.DecimalSpinner;
-import com.spinner.simple.Spinner;
 import com.util.Metodos;
 
 import main.JFfmpeg;
@@ -129,15 +128,7 @@ public class DisplayFrame extends JFrame {
 
 	private String path;
 
-	private SimpleButton btnNewButton_2;
-
-	private DecimalSpinner time1;
-
-	private SimpleButton btnNewButton_3;
-
-	private DecimalSpinner time2;
-
-	private JButton btnNewButton_4;
+	private NButton btnNewButton_4;
 
 	private LinkedList<String> comandos;
 
@@ -145,17 +136,226 @@ public class DisplayFrame extends JFrame {
 
 	private JPanel panel_8;
 
-	private Spinner fps;
-
 	private DragAndDrop panel_1;
-
-	private SimpleButton btnNewButton_7;
 
 	public VideoViewer ventanaCrop;
 
 	private Point crop;
 
 	private Point cropSize;
+
+	private Time panel_2;
+
+	public static Config configuracion;
+
+	public static VideoPanel videoPanel;
+
+	private NButton btnNewButton_2;
+
+	private void saberComandos(String archivo) {
+
+		boolean reverse = false;
+
+		boolean bn = false;
+
+		int tpyeBn = 0;
+
+		float brillo = 0;
+
+		int boxBlur = 0;
+
+		float contraste = 0;
+
+		int colores = 0;
+
+		int rotate = 0;
+
+		int speed = 0;
+
+		String videoCodec = "libx264";
+
+		String audioCodec = "acc";
+
+		String crf = "";
+
+		String qv = "";
+
+		String blur = "";
+
+		if (configuracion != null) {
+
+			reverse = configuracion.getEfectos().getReverse().getChckbxNewCheckBox().isSelected();
+
+			bn = configuracion.getEfectos().getBn().getChckbxNewCheckBox().isSelected();
+
+			tpyeBn = configuracion.getEfectos().getBn().getComboBox().getSelectedIndex();
+
+			brillo = configuracion.getEfectos().getBrillo().getChckbxNewCheckBox().getValor();
+
+			contraste = configuracion.getEfectos().getConstraste().getChckbxNewCheckBox().getValor();
+
+			colores = configuracion.getEfectos().getColores().getChckbxNewCheckBox().getValor();
+
+			rotate = configuracion.getEfectos().getRotate().getChckbxNewCheckBox().getValor();
+
+			speed = configuracion.getEfectos().getSpeed().getChckbxNewCheckBox().getValor();
+
+			videoCodec = configuracion.getEfectos().getCodec().getVideoCodec().getText();
+
+			audioCodec = configuracion.getEfectos().getCodec().getAudioCodec().getText();
+
+			boxBlur = configuracion.getBlur().getBlur().getValor();
+
+			blur = configuracion.getBlur().getBrillo().getValor() + "x" + boxBlur + "x"
+					+ configuracion.getBlur().getDatoX().getValor() + "x"
+					+ configuracion.getBlur().getDatoY().getValor() + "x"
+					+ configuracion.getBlur().getAncho().getValor() + "x"
+					+ configuracion.getBlur().getAlto().getValor();
+
+			if (configuracion.getCrop().isCrop() && (!videoPanel.getCrop().startsWith("0")
+					&& !videoPanel.getCrop().substring(videoPanel.getCrop().indexOf("x")).startsWith("0"))) {
+
+				comandos.add("-crop");
+
+				comandos.add(videoPanel.getCrop());
+
+			}
+
+			if (reverse) {
+
+				comandos.add("-reverse");
+
+			}
+
+			if (brillo > 0f) {
+
+				comandos.add("-brillo");
+
+				comandos.add(Float.toString(brillo));
+
+			}
+
+			if (contraste > 0f) {
+
+				comandos.add("-contrate");
+
+				comandos.add(Float.toString(contraste));
+
+			}
+
+			if (colores > 0f) {
+
+				comandos.add("-colors");
+
+				comandos.add(Float.toString(colores));
+
+			}
+
+			if (rotate > 0) {
+
+				comandos.add("-rotate");
+
+				comandos.add("#" + rotate);
+
+			}
+
+			if (speed > 0) {
+
+				comandos.add("-speed");
+
+				comandos.add(Integer.toString(speed));
+
+			}
+
+			if (bn) {
+
+				comandos.add("-bn");
+
+				comandos.add(Integer.toString(tpyeBn));
+
+			}
+
+			if (boxBlur > 0) {
+
+				comandos.add("-blur");
+
+				comandos.add(blur);
+
+			}
+
+			if (configuracion.getEfectos().getHq().getChckbxNewCheckBox().isSelected()) {
+
+				comandos.add("-good");
+
+			}
+
+			else {
+
+				comandos.add("-bad");
+
+			}
+
+			comandos.add("-fps");
+
+			comandos.add(Integer.toString(configuracion.getEfectos().getFps().getChckbxNewCheckBox().getValor()));
+
+			comandos.add("-loop");
+
+			comandos.add(Integer.toString(configuracion.getEfectos().getLoop().getChckbxNewCheckBox().getValor()));
+
+			comandos.add("-codec");
+
+			comandos.add(videoCodec + " " + audioCodec);
+
+			if (configuracion.getWatermark().getWatermark()) {
+
+				comandos.add("-watermark");
+
+				comandos.add(configuracion.getWatermark().getArchivo());
+
+				comandos.add("-text-watermark");
+
+				comandos.add(configuracion.getWatermark().getText());
+
+				comandos.add("--pos-text-watermark");
+
+				comandos.add(Integer.toString(configuracion.getWatermark().getPos()));
+
+				comandos.add("--color-watermark-text");
+
+				comandos.add(configuracion.getWatermark().getColor().getColor().toString());
+
+				comandos.add("-font-size-text-watermark");
+
+				comandos.add(Integer.toString(configuracion.getWatermark().getFuente().getFontSize()));
+
+			}
+
+		}
+
+		else {
+
+			comandos.add("-fps");
+
+			comandos.add("25");
+
+			comandos.add("-good");
+
+		}
+
+		// Leo de la bd
+
+//		// comandos[9] = "\"crop=" + cropSize.x + ":" + cropSize.y + ":" + crop.x + ":"
+//		// + crop.y + "\"";
+//
+
+	}
+
+	public Point getCrop() {
+
+		return crop;
+
+	}
 
 	public void setCrop(Point crop) {
 
@@ -177,27 +377,27 @@ public class DisplayFrame extends JFrame {
 
 			if (primerTiempo) {
 
-				time1.setValor(tiempo);
+				panel_2.getTime1().setValor(tiempo);
 
 			}
 
 			else {
 
-				if (time2.getValor() == 0f) {
+				if (panel_2.getTime2().getValor() == 0f) {
 
-					time2.setValor(1f);
+					panel_2.getTime2().setValor(1f);
 
 				}
 
-				else if (tiempo > time1.getValor()) {
+				else if (tiempo > panel_2.getTime1().getValor()) {
 
-					time2.setValor(tiempo - time1.getValor());
+					panel_2.getTime2().setValor(tiempo - panel_2.getTime1().getValor());
 
 				}
 
 				else {
 
-					time1.setValor(0f);
+					panel_2.getTime1().setValor(0f);
 
 				}
 
@@ -285,6 +485,103 @@ public class DisplayFrame extends JFrame {
 
 	}
 
+	public void convertir() {
+
+		if (panel_2.getTime2().getValor() > 0f) {
+
+			try {
+
+				btnNewButton_4.setEnabled(false);
+
+				String archivo = JVideoPlayer.getListView().getMap()
+						.get(JVideoPlayer.getListView().getList().get(PlayListFrame.indice));
+
+				comandos.clear();
+
+				comandos.add("-i");
+
+				comandos.add(archivo);
+
+				comandos.add("-ss");
+
+				comandos.add(Float.toString(panel_2.getTime1().getValor()));
+
+				comandos.add("-t");
+
+				comandos.add(Float.toString(panel_2.getTime2().getValor()));
+
+				saberComandos(archivo);
+
+				comandos.add("-y");
+
+				if (configuracion == null) {
+
+					comandos.add(
+							archivo.substring(0, archivo.lastIndexOf(".")) + "_" + Metodos.saberFechaActual() + ".gif");
+
+				}
+
+				else {
+
+					if (configuracion.getAjustes().getOutput().getFile().isEmpty()) {
+
+						comandos.add(archivo.substring(0, archivo.lastIndexOf(".")) + "_" + Metodos.saberFechaActual()
+								+ "." + configuracion.getAjustes().getExtension().getText());
+
+					}
+
+					else {
+
+						comandos.add(configuracion.getAjustes().getOutput().getFile()
+								+ archivo.substring(archivo.lastIndexOf(JMthos.saberSeparador()) + 1,
+										archivo.lastIndexOf("."))
+								+ "_" + Metodos.saberFechaActual() + "."
+								+ configuracion.getAjustes().getExtension().getText());
+
+					}
+
+				}
+
+				JFfmpeg conversion;
+
+				if (configuracion != null) {
+
+					conversion = new JFfmpeg(comandos.toArray(new String[0]),
+							configuracion.getAjustes().getPlayFile().isSelected());
+
+					if (configuracion.getAjustes().getOpenFolder().isSelected()) {
+
+						JMthos.abrirCarpeta(comandos.getLast().substring(0,
+								comandos.getLast().lastIndexOf(JMthos.saberSeparador())));
+
+					}
+
+				}
+
+				else {
+
+					conversion = new JFfmpeg(comandos.toArray(new String[0]), true);
+
+				}
+
+				btnNewButton_4.setEnabled(true);
+
+				String dbName = JMthos.directorioActual() + "db" + JMthos.saberSeparador() + "video_gif.db";
+
+				System.out.println(conversion.getOutput());
+
+			}
+
+			catch (Exception e1) {
+
+				e1.printStackTrace();
+
+			}
+
+		}
+
+	}
+
 	public DisplayFrame() throws TooManyListenersException {
 
 		comandos = new LinkedList<>();
@@ -347,7 +644,7 @@ public class DisplayFrame extends JFrame {
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(DisplayFrame.class.getResource("/images/video_gif.png")));
 
-		playListFrame = new PlayListFrame(ventanaCrop);
+		playListFrame = new PlayListFrame();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -388,12 +685,15 @@ public class DisplayFrame extends JFrame {
 		mnFile.add(mntmOpenVideo);
 
 		separator = new JSeparator();
+
 		separator.setBackground(Color.WHITE);
 
 		mnFile.add(separator);
 
 		mntmNewMenuItem = new JMenuItem("Folder");
+
 		mntmNewMenuItem.setBackground(Color.WHITE);
+
 		mntmNewMenuItem.setFont(new Font("SansSerif", Font.PLAIN, 16));
 
 		mntmNewMenuItem.addMouseListener(new MouseAdapter() {
@@ -406,138 +706,30 @@ public class DisplayFrame extends JFrame {
 
 			}
 		});
+
 		mntmNewMenuItem.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/if_open-file_85334.png")));
+
 		mnFile.add(mntmNewMenuItem);
 
 		separator_1 = new JSeparator();
+
 		separator_1.setBackground(Color.WHITE);
+
 		mnFile.add(separator_1);
 
 		mntmOpenSubtitle = new JMenuItem("Open Subtitle");
+
 		mntmOpenSubtitle.setFont(new Font("SansSerif", Font.PLAIN, 16));
+
 		mntmOpenSubtitle.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/srt.png")));
+
 		mntmOpenSubtitle.setBackground(Color.WHITE);
 
 		mnFile.add(mntmOpenSubtitle);
 
-		btnNewButton_2 = new SimpleButton("");
+		btnNewButton_4 = new NButton("Convert");
 
-		btnNewButton_2.setForeground(Color.WHITE);
-		btnNewButton_2.setRadius(0);
-		btnNewButton_2.setBorderColor(Color.WHITE);
-		btnNewButton_2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				ponerTiempo(true);
-
-			}
-		});
-
-		btnNewButton_2.setContentAreaFilled(false);
-
-		btnNewButton_2.setBorder(null);
-
-		btnNewButton_2.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/time_1.png")));
-
-		btnNewButton_2.setBackground(Color.WHITE);
-
-		time1 = new DecimalSpinner();
-
-		time1.sumarAlto(15);
-
-		time1.setLabelText("Start time");
-
-		time1.setHeaderFont((new Font("Dialog", Font.PLAIN, 18)));
-
-		time1.setForeground(Color.WHITE);
-
-		time1.setBackground(Color.WHITE);
-
-		btnNewButton_3 = new SimpleButton("");
-
-		btnNewButton_3.setBorderColor(Color.WHITE);
-
-		btnNewButton_3.addMouseListener(new MouseAdapter() {
-
-			@Override
-
-			public void mousePressed(MouseEvent e) {
-
-				ponerTiempo(false);
-
-			}
-
-		});
-
-		btnNewButton_3.setContentAreaFilled(false);
-
-		btnNewButton_3.setBorder(null);
-
-		btnNewButton_3.setBackground(Color.WHITE);
-
-		btnNewButton_3.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/time_2.png")));
-
-		time2 = new DecimalSpinner();
-
-		time2.sumarAlto(15);
-
-		time2.setLabelText("Seconds");
-
-		time2.setHeaderFont((new Font("Dialog", Font.PLAIN, 18)));
-
-		time2.setIncremento(0.25f);
-
-		time2.setMinValor(0f);
-
-		time2.setForeground(Color.WHITE);
-
-		time2.setBackground(Color.WHITE);
-
-		fps = new Spinner();
-
-		fps.setCenterText(true);
-
-		fps.sumarAlto(15);
-
-		fps.setLabelText("FPS");
-
-		fps.setHeaderFont((new Font("Dialog", Font.PLAIN, 18)));
-
-		fps.setMinValor(1);
-
-		fps.setValor(25);
-
-		btnNewButton_7 = new SimpleButton("Crop");
-
-		btnNewButton_7.setBorderColor(Color.WHITE);
-
-		btnNewButton_7.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-
-				try {
-
-					if (!(ventanaCrop instanceof VideoViewer)) {
-
-						ventanaCrop = new VideoViewer(frame);
-
-					}
-
-					ventanaCrop.setVisible(true);
-
-				}
-
-				catch (Exception e1) {
-
-				}
-
-			}
-
-		});
-
-		btnNewButton_7.setFont(new Font("Dialog", Font.PLAIN, 20));
-
-		btnNewButton_4 = new JButton("Convert");
+		btnNewButton_4.setBackground(Color.WHITE);
 
 		btnNewButton_4.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
@@ -561,7 +753,9 @@ public class DisplayFrame extends JFrame {
 
 				try {
 
-					new Config(ventanaCrop, frame).setVisible(true);
+					Config config = new Config(ventanaCrop, frame);
+
+					config.setVisible(true);
 
 				}
 
@@ -581,73 +775,7 @@ public class DisplayFrame extends JFrame {
 
 			public void actionPerformed(ActionEvent e) {
 
-				if (time2.getValor() > 0f) {
-
-					try {
-
-						btnNewButton_4.setEnabled(false);
-
-						String archivo = JVideoPlayer.getListView().getMap()
-								.get(JVideoPlayer.getFrame().getMediaPlayer().getMediaMetaData().getTitle());
-
-						comandos.clear();
-
-						comandos.add("-i");
-
-						comandos.add(archivo);
-
-						comandos.add("-ss");
-
-						comandos.add(Float.toString(time1.getValor()));
-
-						comandos.add("-t");
-
-						comandos.add(Float.toString(time2.getValor()));
-						comandos.add("-reverse");
-						comandos.add("-fps");
-
-						comandos.add(Integer.toString(fps.getValor()));
-
-						// comandos[6] = "-width";
-
-						// comandos[7] = Integer.toString(ancho.getValor());
-
-						// if (hq.isSelected()) {
-
-						// comandos[10] = "-good";
-						// }
-
-						// else {
-
-						// comandos[10] = "-bad";
-
-						// }
-
-						comandos.add("-bn");
-
-						comandos.add("-bad");
-
-						// comandos[9] = "\"crop=" + cropSize.x + ":" + cropSize.y + ":" + crop.x + ":"
-						// + crop.y + "\"";
-
-						comandos.add("-y");
-
-						comandos.add(archivo.substring(0, archivo.lastIndexOf(".")) + "_" + Metodos.saberFechaActual()
-								+ ".gif");
-
-						System.out.println(comandos.getLast());
-
-						JFfmpeg utilidad = new JFfmpeg(comandos.toArray(new String[0]), true);
-
-						btnNewButton_4.setEnabled(true);
-
-					}
-
-					catch (Exception e1) {
-						e1.printStackTrace();
-					}
-
-				}
+				convertir();
 
 			}
 
@@ -1155,23 +1283,70 @@ public class DisplayFrame extends JFrame {
 
 		panel_8.setLayout(new GridLayout());
 
-		panel_8.add(btnNewButton_2);
+		panel_2 = new Time();
 
-		panel_8.add(time1);
+		panel_2.setBackground(Color.WHITE);
 
-		panel_8.add(btnNewButton_3);
+		panel_2.getBtn1().addMouseListener(new MouseAdapter() {
 
-		panel_8.add(time2);
+			@Override
 
-		panel_8.add(fps);
+			public void mousePressed(MouseEvent e) {
 
-		panel_8.add(btnNewButton_7);
+				ponerTiempo(true);
+
+			}
+
+		});
+
+		panel_2.getBtn2().addMouseListener(new MouseAdapter() {
+
+			@Override
+
+			public void mousePressed(MouseEvent e) {
+
+				ponerTiempo(false);
+
+			}
+
+		});
+
+		menuBar.add(panel_2);
 
 		panel_8.add(btnNewButton_4);
+
+		btnNewButton_2 = new NButton("Convert All");
+
+		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+		btnNewButton_2.setText("Bulk");
+
+		btnNewButton_2.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/bulk.png")));
+
+		btnNewButton_2.setBackground(Color.WHITE);
+
+		btnNewButton_2.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+
+				for (int i = 0; i < JVideoPlayer.getListView().getList().size(); i++) {
+
+					PlayListFrame.indice = i;
+
+					convertir();
+
+				}
+
+			}
+
+		});
+
+		panel_8.add(btnNewButton_2);
 
 		panel_8.add(mntmNewMenuItem_1);
 
 		menuBar.add(panel_8);
+
 	}
 
 	public EmbeddedMediaPlayer getMediaPlayer() {

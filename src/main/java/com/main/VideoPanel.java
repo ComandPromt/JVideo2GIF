@@ -61,7 +61,9 @@ public class VideoPanel extends JPanel {
 	private JLabel timeLabel;
 
 	private JPanel videoDisplay;
+
 	private JPanel controlPanel;
+
 	private Spinner xField;
 
 	private Spinner yField;
@@ -73,6 +75,23 @@ public class VideoPanel extends JPanel {
 	private static double duracion;
 
 	private boolean pinto;
+
+	public String getCrop() {
+
+		try {
+
+			return widthField.getValor() + "x" + heightField.getValor() + "x" + xField.getValor() + "x"
+					+ yField.getValor();
+
+		}
+
+		catch (Exception e) {
+
+		}
+
+		return "";
+
+	}
 
 	public Spinner getxField() {
 

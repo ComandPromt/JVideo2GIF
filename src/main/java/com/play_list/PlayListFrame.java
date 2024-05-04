@@ -15,7 +15,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.stream.Stream;
@@ -32,13 +31,11 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.comboBox.comboSuggestion.ComboBoxSuggestion;
 import com.dialog.confirm.MessageDialog;
 import com.draganddrop.DragAndDrop;
 import com.draganddrop.UtilDragAndDrop;
 import com.history.ListHistory;
 import com.main.JVideoPlayer;
-import com.main.VideoViewer;
 import com.util.Metodos;
 
 public class PlayListFrame extends JFrame {
@@ -69,7 +66,7 @@ public class PlayListFrame extends JFrame {
 
 	static boolean subtitle;
 
-	private VideoViewer videoPanel;
+	public static int indice;
 
 	public void ponerEnCola(java.io.File[] archivos) {
 
@@ -77,40 +74,48 @@ public class PlayListFrame extends JFrame {
 
 		String subtitulo = "";
 
-		for (File f : archivos) {
+		if (archivos.length == 0) {
 
-			if (Metodos.esVideo(f.getName())) {
+			JVideoPlayer.clearHistory();
 
-				video = f.getAbsolutePath();
+		}
 
-				JVideoPlayer.addHistory(f.getName(), f.getAbsolutePath());
+		else {
+
+			for (File f : archivos) {
 
 				subtitle = false;
 
+				if (Metodos.esVideo(f.getName())) {
+
+					video = f.getAbsolutePath();
+
+					JVideoPlayer.addHistory(f.getName(), f.getAbsolutePath());
+
+				}
+
+				else if (f.getName().trim().endsWith(".srt") && subtitulo.isEmpty()) {
+
+					subtitulo = f.getAbsolutePath();
+
+					JVideoPlayer.frame.getMediaPlayer().setSubTitleFile(subtitulo);
+
+					subtitle = true;
+
+				}
+
 			}
 
-			else if (f.getName().trim().endsWith(".srt") && subtitulo.isEmpty()) {
+			if (!subtitle && !dlm.isEmpty()) {
 
-				subtitulo = f.getAbsolutePath();
+				JVideoPlayer.frame.getMediaPlayer().playMedia(video);
 
-				JVideoPlayer.frame.getMediaPlayer().setSubTitleFile(subtitulo);
-
-				subtitle = true;
+				JVideoPlayer.frame.getPlayButton()
+						.setIcon(new ImageIcon(JVideoPlayer.class.getResource("/images/pause.png")));
 
 			}
 
 		}
-
-		if (!subtitle && !dlm.isEmpty()) {
-
-			JVideoPlayer.frame.getMediaPlayer().playMedia(video);
-
-			JVideoPlayer.frame.getPlayButton()
-					.setIcon(new ImageIcon(JVideoPlayer.class.getResource("/images/pause.png")));
-
-		}
-
-		videoPanel.ponerVideos();
 
 	}
 
@@ -180,43 +185,29 @@ public class PlayListFrame extends JFrame {
 
 		try {
 
+			dlm.clear();
+
 			JVideoPlayer.getListHistory();
 
 			ListHistory.cleanHistory();
-
-			JVideoPlayer.getListView().getList().clear();
-
-			dlm.clear();
 
 			list.setModel(dlm);
 
 			scrollPane.setViewportView(getList());
 
-			JVideoPlayer.getListView().getMap().clear();
-
-			if (videoPanel == null) {
-
-				VideoViewer.openButton = new ComboBoxSuggestion<String>();
-
-			}
-
-			else {
-
-				videoPanel.ponerVideos();
-
-			}
+			JVideoPlayer.clearHistory();
 
 		}
 
-		catch (IOException e1) {
+		catch (Exception e1) {
+
+			e1.printStackTrace();
 
 		}
 
 	}
 
-	public PlayListFrame(VideoViewer video) {
-
-		this.videoPanel = video;
+	public PlayListFrame() {
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(PlayListFrame.class.getResource("/images/name.png")));
 
@@ -286,8 +277,6 @@ public class PlayListFrame extends JFrame {
 
 			if (!ListHistory.readHistory().isEmpty()) {
 
-				JVideoPlayer.getListHistory();
-
 				setList(ListHistory.readHistory());
 
 			}
@@ -322,21 +311,15 @@ public class PlayListFrame extends JFrame {
 
 			public void mouseClicked(MouseEvent e) {
 
+				indice = list.getSelectedIndex();
+
 				if (JVideoPlayer.getListView().getList().isEmpty()) {
 
 					JVideoPlayer.setearLista();
 
 				}
 
-				if (e.getClickCount() == 2) {
-
-					JVideoPlayer.openVideoFromList(list.getSelectedValue());
-
-					setList(JVideoPlayer.getListView().getList());
-
-					getScrollPane().setViewportView(getList());
-
-				}
+				JVideoPlayer.openVideoFromList(list.getSelectedValue());
 
 			}
 
@@ -493,7 +476,7 @@ public class PlayListFrame extends JFrame {
 
 		dlm = new DefaultListModel<String>();
 
-		for (int i = arrayList.size() - 1; i >= 0; i--) {
+		for (int i = 0; i < arrayList.size(); i++) {
 
 			dlm.addElement(arrayList.get(i));
 

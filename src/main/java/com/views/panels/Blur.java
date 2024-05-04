@@ -9,16 +9,61 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.LineBorder;
 
 import com.layout.MaterialPanelLayout;
 import com.spinner.simple.Spinner;
 
 public class Blur extends JPanel {
 
-	public Blur() {
+	private Spinner textArea;
 
-		setBorder(new LineBorder(new Color(0, 0, 0)));
+	private Spinner btnNewButton;
+
+	private Spinner datoX;
+
+	private Spinner datoY;
+
+	private Spinner width;
+
+	private Spinner height;
+
+	public Spinner getAncho() {
+
+		return width;
+
+	}
+
+	public Spinner getAlto() {
+
+		return height;
+
+	}
+
+	public Spinner getBrillo() {
+
+		return textArea;
+
+	}
+
+	public Spinner getBlur() {
+
+		return btnNewButton;
+
+	}
+
+	public Spinner getDatoX() {
+
+		return datoX;
+
+	}
+
+	public Spinner getDatoY() {
+
+		return datoY;
+
+	}
+
+	public Blur() {
 
 		setLayout(new GridLayout(0, 1, 0, 0));
 
@@ -30,25 +75,25 @@ public class Blur extends JPanel {
 
 		panel.setLayout(new GridLayout(0, 2, 0, 0));
 
-		JLabel brillo = new JLabel("Brillo");
+		JLabel brillo = new JLabel("Brightness");
 
 		brillo.setIcon(new ImageIcon(getClass().getResource("/images/brillo.png")));
 
 		brillo.setFont(new Font("Dialog", Font.PLAIN, 17));
 
-		JLabel desenfoque = new JLabel("Desenfoque");
+		JLabel desenfoque = new JLabel("Blur");
 
 		desenfoque.setIcon(new ImageIcon(getClass().getResource("/images/blur.png")));
 
 		desenfoque.setFont(new Font("Dialog", Font.PLAIN, 17));
 
-		Spinner textArea = new Spinner();
+		textArea = new Spinner();
 
 		textArea.setValorMaximo(false);
 
 		textArea.setFont(new Font("Dialog", Font.PLAIN, 15));
 
-		textArea.setLabelText("Brillo");
+		textArea.setLabelText("Brightness");
 
 		textArea.setHeaderFont(new Font("Dialog", Font.PLAIN, 15));
 
@@ -56,9 +101,9 @@ public class Blur extends JPanel {
 
 		textArea.setCenterText(true);
 
-		Spinner btnNewButton = new Spinner();
+		btnNewButton = new Spinner();
 
-		btnNewButton.setLabelText("Desenfoque");
+		btnNewButton.setLabelText("Blur");
 
 		btnNewButton.setFont(new Font("Dialog", Font.PLAIN, 14));
 
@@ -70,6 +115,16 @@ public class Blur extends JPanel {
 
 		btnNewButton.setValorMaximo(false);
 
+		width = new Spinner("Width");
+
+		width.setFont(new Font("Dialog", Font.PLAIN, 17));
+
+		JLabel horizontal = new JLabel("Width");
+
+		horizontal.setIcon(new ImageIcon(getClass().getResource("/images/horizontal.png")));
+
+		horizontal.setFont(new Font("Dialog", Font.PLAIN, 17));
+
 		ArrayList<JComponent> lista = new ArrayList<>();
 
 		lista.add(brillo);
@@ -80,15 +135,23 @@ public class Blur extends JPanel {
 
 		lista.add(btnNewButton);
 
+		lista.add(horizontal);
+
+		lista.add(width);
+
 		ArrayList<Integer> porcentajes = new ArrayList<>();
 
-		porcentajes.add(25);
+		porcentajes.add(17);
 
-		porcentajes.add(25);
+		porcentajes.add(16);
 
-		porcentajes.add(25);
+		porcentajes.add(16);
 
-		porcentajes.add(25);
+		porcentajes.add(16);
+
+		porcentajes.add(16);
+
+		porcentajes.add(16);
 
 		MaterialPanelLayout panel_1 = new MaterialPanelLayout(lista, porcentajes, true);
 
@@ -96,53 +159,67 @@ public class Blur extends JPanel {
 
 		panel.add(panel_1);
 
-		JLabel horizontal = new JLabel("Horizontal");
-
-		horizontal.setIcon(new ImageIcon(getClass().getResource("/images/horizontal.png")));
-
-		horizontal.setFont(new Font("Dialog", Font.PLAIN, 17));
-
-		JLabel vertical = new JLabel("Vertical");
+		JLabel vertical = new JLabel("Height");
 
 		vertical.setIcon(new ImageIcon(getClass().getResource("/images/vertical.png")));
 
 		vertical.setFont(new Font("Dialog", Font.PLAIN, 17));
 
-		Spinner shorizontal = new Spinner();
+		JLabel equis = new JLabel("X");
 
-		shorizontal.setValorMaximo(false);
+		equis.setIcon(new ImageIcon(getClass().getResource("/images/vertical.png")));
 
-		shorizontal.setCenterText(true);
+		equis.setFont(new Font("Dialog", Font.PLAIN, 17));
 
-		shorizontal.setLabelText("Horizontal");
+		JLabel ye = new JLabel("Y");
 
-		shorizontal.setFont(new Font("Dialog", Font.PLAIN, 15));
+		ye.setIcon(new ImageIcon(getClass().getResource("/images/vertical.png")));
 
-		shorizontal.setHeaderFont(new Font("Dialog", Font.PLAIN, 15));
+		ye.setFont(new Font("Dialog", Font.PLAIN, 17));
 
-		shorizontal.sumarAlto(17);
+		datoX = new Spinner();
 
-		Spinner svertical = new Spinner("Vertical");
+		datoX.setValorMaximo(false);
 
-		svertical.setValorMaximo(false);
+		datoX.setCenterText(true);
 
-		svertical.setCenterText(true);
+		datoX.setLabelText("X");
 
-		svertical.setFont(new Font("Dialog", Font.PLAIN, 15));
+		datoX.setFont(new Font("Dialog", Font.PLAIN, 15));
 
-		svertical.setHeaderFont(new Font("Dialog", Font.PLAIN, 15));
+		datoX.setHeaderFont(new Font("Dialog", Font.PLAIN, 15));
 
-		svertical.sumarAlto(17);
+		datoX.sumarAlto(17);
+
+		datoY = new Spinner("Y");
+
+		datoY.setValorMaximo(false);
+
+		datoY.setCenterText(true);
+
+		datoY.setFont(new Font("Dialog", Font.PLAIN, 15));
+
+		datoY.setHeaderFont(new Font("Dialog", Font.PLAIN, 15));
+
+		datoY.sumarAlto(17);
 
 		ArrayList<JComponent> lista2 = new ArrayList<>();
 
-		lista2.add(horizontal);
+		lista2.add(equis);
 
-		lista2.add(shorizontal);
+		lista2.add(datoX);
+
+		lista2.add(ye);
+
+		lista2.add(datoY);
+
+		height = new Spinner("Height");
+
+		height.setFont(new Font("Dialog", Font.PLAIN, 17));
 
 		lista2.add(vertical);
 
-		lista2.add(svertical);
+		lista2.add(height);
 
 		MaterialPanelLayout panel_2 = new MaterialPanelLayout(lista2, porcentajes, true);
 

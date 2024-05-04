@@ -63,6 +63,8 @@ public class JVideoPlayer {
 
 		listView = new ViewList();
 
+		JMthos.crearCarpeta(JMthos.directorioActual() + "db");
+
 		Metodos.crearCarpeta();
 
 		setearLista();
@@ -455,6 +457,24 @@ public class JVideoPlayer {
 	public static ListHistory getListHistory() {
 
 		return listHistory;
+
+	}
+
+	public static void clearHistory() {
+
+		try {
+
+			listView.getList().clear();
+
+			listView.getMap().clear();
+
+			VideoViewer.openButton.removeAllItems();
+
+		}
+
+		catch (Exception e) {
+
+		}
 
 	}
 

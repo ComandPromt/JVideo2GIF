@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,13 +23,48 @@ import com.comboBox.comboSuggestion.ComboBoxSuggestion;
 import com.history.ListHistory;
 import com.views.DisplayFrame;
 
+@SuppressWarnings("serial")
 public class VideoViewer extends JFrame {
 
 	private VideoPanel videoPanel;
 
 	public static ComboBoxSuggestion<String> openButton;
 
+	private DisplayFrame frame;
+
+	public String saberCrop() {
+
+		try {
+
+			return videoPanel.getCrop();
+
+		}
+
+		catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		return "";
+
+	}
+
 	public VideoViewer(DisplayFrame frame) {
+
+		addWindowListener(new WindowAdapter() {
+
+			@Override
+
+			public void windowClosing(WindowEvent e) {
+
+				DisplayFrame.videoPanel = videoPanel;
+
+			}
+
+		});
+
+		this.frame = frame;
 
 		setTitle("Video Viewer");
 
@@ -48,7 +85,9 @@ public class VideoViewer extends JFrame {
 		openButton.addItemListener(new ItemListener() {
 
 			public void itemStateChanged(ItemEvent e) {
+
 				try {
+
 					if (JVideoPlayer.getListView().getMap().get(openButton.getSelectedItem().toString()) != null
 							&& new File(
 									JVideoPlayer.getListView().getMap().get(openButton.getSelectedItem().toString()))
@@ -122,8 +161,6 @@ public class VideoViewer extends JFrame {
 			openButton.removeAllItems();
 
 			if (!historial.isEmpty()) {
-
-				Collections.sort(historial);
 
 				for (int i = 0; i < historial.size(); i++) {
 
