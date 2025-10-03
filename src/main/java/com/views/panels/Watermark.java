@@ -25,17 +25,21 @@ public class Watermark extends JPanel {
 
 	private ChooserWithInput archivo;
 
-	public boolean getWatermark() {
+	private PostText posWatermark;
 
-		return watermark.watermark();
+	public int getPosWatermark() {
+
+		try {
+
+			return posWatermark.getPos();
+
+		} catch (Exception e) {
+
+		}
+
+		return 0;
 
 	}
-
-//	public void setWatermark(CheckBoxCustom watermark) {
-//
-//		this.watermark = watermark;
-//
-//	}
 
 	public FontPicker getFuente() {
 
@@ -113,7 +117,9 @@ public class Watermark extends JPanel {
 
 		setLayout(new GridLayout(5, 0, 0, 0));
 
-		watermark = new PostText();
+		posWatermark = new PostText("                                  Watermark Position", false, false);
+
+		watermark = new PostText("                                  Text Position", true, true);
 
 		JPanel panel1 = new JPanel();
 
@@ -137,13 +143,15 @@ public class Watermark extends JPanel {
 
 		JPanel panel_1 = new JPanel();
 
-		add(panel_1);
+		panel_1.setLayout(new GridLayout(2, 1));
 
-		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
+		panel_1.add(posWatermark);
 
 		color = new CopyColor(Color.BLACK, false);
 
 		panel_1.add(color);
+
+		add(panel_1);
 
 		color.setLayout(new GridLayout(1, 0, 0, 0));
 
@@ -172,6 +180,12 @@ public class Watermark extends JPanel {
 		archivo.setHorizontalAlignment(SwingConstants.CENTER);
 
 		add(archivo);
+
+	}
+
+	public boolean getWatermark() {
+
+		return watermark.watermark();
 
 	}
 

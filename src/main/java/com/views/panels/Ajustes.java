@@ -76,7 +76,7 @@ public class Ajustes extends JPanel {
 
 		add(extension);
 
-		output = new ChooserWithInput("Select A Image", "", true, null, false, true);
+		output = new ChooserWithInput("Select A Image", "", true, "", false, true);
 
 		output.setHorizontalAlignment(SwingConstants.CENTER);
 

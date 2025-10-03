@@ -2,61 +2,93 @@ package com.views.panels;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import com.buttons.round.NButton;
-import com.checkbox.CheckBoxCustom;
-import com.comboBox.comboSuggestion.ComboBoxSuggestion;
-import com.views.Config;
+import com.dialog.confirm.MessageDialog;
+import com.dialog.confirm.MessageDialog.MessageType;
+import com.material.table.MaterialTable;
 
+import mthos.JMthos;
+
+@SuppressWarnings("serial")
 public class Historial extends JPanel {
 
 	public Historial() {
 
-		ComboBoxSuggestion comboBox = new ComboBoxSuggestion();
+		setLayout(null);
 
-		comboBox.addItem("Nuevo 11111111");
+		JPanel accionesBd = new JPanel();
 
-		comboBox.addItem("a");
+		String db = JMthos.directorioActual() + "db" + JMthos.saberSeparador() + "video_gif.db";
 
-		comboBox.addItem("bbb");
+		ArrayList<String> cabecera = new ArrayList<>();
 
-		add(comboBox);
+		cabecera.add("ID");
 
-		JPanel items = new JPanel();
+		cabecera.add("COMANDO");
 
-		NButton agrega = new NButton("");
+		cabecera.add("ORIGEN");
 
-		agrega.setBackground(Color.WHITE);
+		cabecera.add("CONVERSION");
 
-		agrega.setIcon(new ImageIcon(Config.class.getResource("/images/add.png")));
+		MaterialTable panel = new MaterialTable(cabecera,
+				JMthos.selectSqlite(db, "SELECT ID,COMANDO,ORIGEN,CONVERSION FROM CONVERSIONES ORDER BY ID DESC"), 2,
+				2);
 
-		NButton edita = new NButton("");
+		addComponentListener(new ComponentAdapter() {
 
-		edita.setIcon(new ImageIcon(Config.class.getResource("/images/edit.png")));
+			@Override
 
-		NButton elimina = new NButton("");
+			public void componentResized(ComponentEvent e) {
 
-		elimina.setIcon(new ImageIcon(Config.class.getResource("/images/delete.png")));
+				accionesBd.setBounds(0, 0, getWidth(), Math.round(getHeight() * 0.05f));
 
-		edita.setBackground(Color.WHITE);
+				panel.setBounds(0, Math.round(getHeight() * 0.05f), getWidth(), Math.round(getHeight() * 0.95f));
 
-		elimina.setBackground(Color.WHITE);
-		CheckBoxCustom usarPerfil = new CheckBoxCustom("Activate");
+			}
 
-		usarPerfil.setFont(new Font("SansSerif", Font.PLAIN, 15));
+		});
 
-		items.add(usarPerfil);
+		accionesBd.setBackground(Color.WHITE);
 
-		items.add(agrega);
+		accionesBd.setLayout(new GridLayout());
 
-		items.add(edita);
+		NButton borrarTodo = new NButton("Clear");
 
-		items.add(elimina);
+		borrarTodo.addMouseListener(new MouseAdapter() {
 
-		add(items);
+			@Override
+
+			public void mousePressed(MouseEvent e) {
+
+				MessageDialog dialogo = new MessageDialog(Color.RED, Color.WHITE, "", "Quieres vaciar la tabla?", null,
+						new Font("Dialog", Font.PLAIN, 30));
+
+				if (dialogo.getMessageType().equals(MessageType.OK)) {
+
+					JMthos.deleteAllFromTableSqlite(db, "CONVERSIONES");
+
+					panel.vaciarTabla();
+
+				}
+
+			}
+
+		});
+
+		accionesBd.add(borrarTodo);
+
+		add(accionesBd);
+
+		add(panel);
 
 	}
 

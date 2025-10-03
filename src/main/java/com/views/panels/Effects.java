@@ -9,12 +9,12 @@ import com.views.panels.effects.Brillo;
 import com.views.panels.effects.Colors;
 import com.views.panels.effects.Contraste;
 import com.views.panels.effects.Fps;
-import com.views.panels.effects.Hq;
 import com.views.panels.effects.Loop;
 import com.views.panels.effects.Reverse;
 import com.views.panels.effects.Rotate;
 import com.views.panels.effects.Speed;
 
+@SuppressWarnings("serial")
 public class Effects extends JPanel {
 
 	private Reverse reverse;
@@ -31,81 +31,49 @@ public class Effects extends JPanel {
 
 	private Speed speed;
 
-	private Codec codec;
-
 	private Loop loop;
 
 	private Fps fps;
 
-	private Hq hq;
-
-	public Hq getHq() {
-
-		return hq;
-
-	}
-
-	public Fps getFps() {
-
-		return fps;
-
-	}
-
-	public Contraste getContraste() {
-
-		return contraste;
-
-	}
-
-	public Colors getColores() {
-
-		return colores;
-
-	}
-
-	public Rotate getRotate() {
-
-		return rotate;
-
-	}
-
-	public Speed getSpeed() {
-
-		return speed;
-
-	}
-
-	public Codec getCodec() {
-
-		return codec;
-
-	}
-
 	public Reverse getReverse() {
-
 		return reverse;
-
 	}
 
 	public Bn getBn() {
-
 		return bn;
+	}
 
+	public Brillo getBrillo() {
+		return brillo;
+	}
+
+	public Contraste getContraste() {
+		return contraste;
+	}
+
+	public Colors getColores() {
+		return colores;
+	}
+
+	public Rotate getRotate() {
+		return rotate;
+	}
+
+	public Speed getSpeed() {
+		return speed;
 	}
 
 	public Loop getLoop() {
-
 		return loop;
+	}
 
+	public Fps getFps() {
+		return fps;
 	}
 
 	public Effects() {
 
 		setLayout(new GridLayout(0, 1, 0, 0));
-
-		fps = new Fps();
-
-		loop = new Loop();
 
 		reverse = new Reverse();
 
@@ -121,11 +89,9 @@ public class Effects extends JPanel {
 
 		speed = new Speed();
 
-		codec = new Codec();
+		loop = new Loop();
 
-		hq = new Hq();
-
-		add(hq);
+		fps = new Fps();
 
 		add(reverse);
 
@@ -139,25 +105,11 @@ public class Effects extends JPanel {
 
 		add(rotate);
 
-		add(fps);
-
 		add(speed);
 
 		add(loop);
 
-		add(codec);
-
-	}
-
-	public Brillo getBrillo() {
-
-		return brillo;
-
-	}
-
-	public Contraste getConstraste() {
-
-		return contraste;
+		add(fps);
 
 	}
 

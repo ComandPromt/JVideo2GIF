@@ -13,6 +13,14 @@ import com.views.Config;
 
 public class Perfiles extends JPanel {
 
+	private CheckBoxCustom usarPerfil;
+
+	public CheckBoxCustom getUsarPerfil() {
+
+		return usarPerfil;
+
+	}
+
 	public Perfiles() {
 
 		ComboBoxSuggestion comboBox = new ComboBoxSuggestion();
@@ -44,7 +52,8 @@ public class Perfiles extends JPanel {
 		edita.setBackground(Color.WHITE);
 
 		elimina.setBackground(Color.WHITE);
-		CheckBoxCustom usarPerfil = new CheckBoxCustom("Activate");
+
+		usarPerfil = new CheckBoxCustom("Activate");
 
 		usarPerfil.setFont(new Font("SansSerif", Font.PLAIN, 15));
 

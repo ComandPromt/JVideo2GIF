@@ -11,7 +11,6 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -70,7 +69,7 @@ public class VideoViewer extends JFrame {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		setSize(800, 600);
+		setSize(900, 600);
 
 		setLocationRelativeTo(null);
 
@@ -120,9 +119,6 @@ public class VideoViewer extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				frame.setCrop(new Point(videoPanel.getxField().getValor(), videoPanel.getyField().getValor()));
-
-				frame.setCropSize(
-						new Point(videoPanel.getWidthField().getValor(), videoPanel.getHeightField().getValor()));
 
 			}
 

@@ -84,6 +84,9 @@ public class JVideoPlayer {
 				try {
 
 					frame = new DisplayFrame();
+
+					frame.setLocationRelativeTo(null);
+
 					frame.getPlayComponent().getVideoSurface().addMouseListener(new MouseAdapter() {
 						@Override
 						public void mousePressed(MouseEvent e) {

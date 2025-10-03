@@ -45,7 +45,7 @@ public class Brillo extends JPanel {
 
 		lista.add(chckbxNewCheckBox);
 
-		ArrayList<Integer> porcentajes = new ArrayList();
+		ArrayList<Integer> porcentajes = new ArrayList<>();
 
 		porcentajes.add(20);
 

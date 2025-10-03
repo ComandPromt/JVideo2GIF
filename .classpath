@@ -42,10 +42,8 @@
 	<classpathentry kind="lib" path="src/main/java/lib/guava-31.1-jre.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/jcodec-0.2.0.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/jcodec-javase-0.2.0.jar"/>
-	<classpathentry kind="lib" path="src/main/java/lib/JFfmpeg.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/JMthos.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/jna-3.5.2.jar"/>
-	<classpathentry kind="lib" path="src/main/java/lib/miglayout-4.0.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/NativeFileChooser.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/NefAnimacion_V2.1_jdk18.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/platform-3.5.2.jar"/>
@@ -56,8 +54,11 @@
 	<classpathentry kind="lib" path="src/main/java/lib/vlcj-3.8.0.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/xuggle-xuggler-5.4.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/lib_colour_picker.jar"/>
-	<classpathentry kind="lib" path="src/main/java/lib/JSimpleIcons.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/JMaterial.jar"/>
 	<classpathentry kind="lib" path="src/main/java/lib/sqlite-jdbc-3.45.3.0.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/timingframework-core-6.1.0.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/timingframework-swing-6.1.0.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/exp4j-0.4.8.jar"/>
+	<classpathentry kind="lib" path="src/main/java/lib/JFfmpeg.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

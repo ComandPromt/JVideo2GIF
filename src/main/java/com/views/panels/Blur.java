@@ -3,6 +3,7 @@ package com.views.panels;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -11,7 +12,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.layout.MaterialPanelLayout;
+import com.spinner.decimal.DecimalSpinner;
 import com.spinner.simple.Spinner;
+
+import net.java.dev.colorchooser.demo.CopyColor;
 
 public class Blur extends JPanel {
 
@@ -26,6 +30,30 @@ public class Blur extends JPanel {
 	private Spinner width;
 
 	private Spinner height;
+
+	private CopyColor color;
+
+	private DecimalSpinner transparencia;
+
+	private DecimalSpinner transparency;
+
+	public float getTransparenciaColor() {
+
+		return transparencia.getValor();
+
+	}
+
+	public float getTransparencia() {
+
+		return transparency.getValor();
+
+	}
+
+	public Color getColor() {
+
+		return color.getColor();
+
+	}
 
 	public Spinner getAncho() {
 
@@ -125,45 +153,21 @@ public class Blur extends JPanel {
 
 		horizontal.setFont(new Font("Dialog", Font.PLAIN, 17));
 
+		try {
+
+			color = new CopyColor();
+
+		}
+
+		catch (IOException e) {
+
+		}
+
+		transparency = new DecimalSpinner(0f, 1f);
+
+		transparency.setLabelText("Transparency");
+
 		ArrayList<JComponent> lista = new ArrayList<>();
-
-		lista.add(brillo);
-
-		lista.add(textArea);
-
-		lista.add(desenfoque);
-
-		lista.add(btnNewButton);
-
-		lista.add(horizontal);
-
-		lista.add(width);
-
-		ArrayList<Integer> porcentajes = new ArrayList<>();
-
-		porcentajes.add(17);
-
-		porcentajes.add(16);
-
-		porcentajes.add(16);
-
-		porcentajes.add(16);
-
-		porcentajes.add(16);
-
-		porcentajes.add(16);
-
-		MaterialPanelLayout panel_1 = new MaterialPanelLayout(lista, porcentajes, true);
-
-		panel_1.setBackground(Color.WHITE);
-
-		panel.add(panel_1);
-
-		JLabel vertical = new JLabel("Height");
-
-		vertical.setIcon(new ImageIcon(getClass().getResource("/images/vertical.png")));
-
-		vertical.setFont(new Font("Dialog", Font.PLAIN, 17));
 
 		JLabel equis = new JLabel("X");
 
@@ -203,29 +207,55 @@ public class Blur extends JPanel {
 
 		datoY.sumarAlto(17);
 
+		lista.add(equis);
+
+		lista.add(datoX);
+
+		lista.add(ye);
+
+		lista.add(datoY);
+
+		JPanel blanco = new JPanel();
+
+		blanco.setBackground(Color.WHITE);
+
+		lista.add(blanco);
+
+		MaterialPanelLayout panel_1 = new MaterialPanelLayout(lista, null, true);
+
+		panel_1.setBackground(Color.WHITE);
+
+		panel.add(panel_1);
+
+		JLabel vertical = new JLabel("Height");
+
+		vertical.setIcon(new ImageIcon(getClass().getResource("/images/vertical.png")));
+
+		vertical.setFont(new Font("Dialog", Font.PLAIN, 17));
+
 		ArrayList<JComponent> lista2 = new ArrayList<>();
 
-		lista2.add(equis);
+		transparencia = new DecimalSpinner(0f, 1f);
 
-		lista2.add(datoX);
+		transparencia.setLabelText("Transparency Color");
 
-		lista2.add(ye);
-
-		lista2.add(datoY);
+		lista2.add(transparencia);
 
 		height = new Spinner("Height");
 
 		height.setFont(new Font("Dialog", Font.PLAIN, 17));
 
-		lista2.add(vertical);
-
-		lista2.add(height);
-
-		MaterialPanelLayout panel_2 = new MaterialPanelLayout(lista2, porcentajes, true);
-
-		panel_2.setBackground(Color.WHITE);
-
-		panel.add(panel_2);
+//		lista2.add(vertical);
+//
+//		lista2.add(height);
+//
+//		lista2.add(transparency);
+//
+//		MaterialPanelLayout panel_2 = new MaterialPanelLayout(lista2, null, true);
+//
+//		panel_2.setBackground(Color.WHITE);
+//
+//		panel.add(panel_2);
 
 	}
 

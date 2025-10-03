@@ -18,8 +18,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.TooManyListenersException;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -33,6 +43,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
@@ -40,12 +51,16 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.buttons.round.NButton;
+import com.checkbox.CheckBoxCustom;
 import com.draganddrop.DragAndDrop;
 import com.draganddrop.UtilDragAndDrop;
 import com.file.nativ.chooser.DemoJavaFxStage;
+import com.history.ListHistory;
 import com.main.JVideoPlayer;
 import com.main.VideoPanel;
 import com.main.VideoViewer;
+import com.message.alerts.PopupAlerts;
+import com.message.alerts.PopupAlerts.AlertType;
 import com.play_list.PlayListFrame;
 import com.progressBar.ProgressBarCustom;
 import com.slider.JSliderCustom;
@@ -142,15 +157,19 @@ public class DisplayFrame extends JFrame {
 
 	private Point crop;
 
-	private Point cropSize;
-
 	private Time panel_2;
 
 	public static Config configuracion;
 
 	public static VideoPanel videoPanel;
 
-	private NButton btnNewButton_2;
+	private CheckBoxCustom btnNewButton_2;
+
+	private CheckBoxCustom chckbxNewCheckBox;
+
+	private PopupAlerts alerta;
+
+	private ArrayList<String> listaComprobacion;
 
 	private void saberComandos(String archivo) {
 
@@ -192,17 +211,16 @@ public class DisplayFrame extends JFrame {
 
 			brillo = configuracion.getEfectos().getBrillo().getChckbxNewCheckBox().getValor();
 
-			contraste = configuracion.getEfectos().getConstraste().getChckbxNewCheckBox().getValor();
-
+			contraste = configuracion.getEfectos().getContraste().getChckbxNewCheckBox().getValor();
 			colores = configuracion.getEfectos().getColores().getChckbxNewCheckBox().getValor();
 
 			rotate = configuracion.getEfectos().getRotate().getChckbxNewCheckBox().getValor();
 
 			speed = configuracion.getEfectos().getSpeed().getChckbxNewCheckBox().getValor();
 
-			videoCodec = configuracion.getEfectos().getCodec().getVideoCodec().getText();
+			videoCodec = configuracion.getCodec().getVideoCodec().getText();
 
-			audioCodec = configuracion.getEfectos().getCodec().getAudioCodec().getText();
+			audioCodec = configuracion.getCodec().getAudioCodec().getText();
 
 			boxBlur = configuracion.getBlur().getBlur().getValor();
 
@@ -243,11 +261,11 @@ public class DisplayFrame extends JFrame {
 
 			}
 
-			if (colores > 0f) {
+			if (colores > 0) {
 
 				comandos.add("-colors");
 
-				comandos.add(Float.toString(colores));
+				comandos.add(Integer.toString(colores));
 
 			}
 
@@ -281,9 +299,15 @@ public class DisplayFrame extends JFrame {
 
 				comandos.add(blur);
 
+				comandos.add("-blurParams");
+
+				comandos.add(configuracion.getBlur().getTransparencia() + "-"
+						+ JMthos.colorToHex(configuracion.getBlur().getColor()) + "x"
+						+ configuracion.getBlur().getTransparenciaColor());
+
 			}
 
-			if (configuracion.getEfectos().getHq().getChckbxNewCheckBox().isSelected()) {
+			if (configuracion.getQuality().getHq().getChckbxNewCheckBox().isSelected()) {
 
 				comandos.add("-good");
 
@@ -317,13 +341,17 @@ public class DisplayFrame extends JFrame {
 
 				comandos.add(configuracion.getWatermark().getText());
 
+				comandos.add("--pos-watermark");
+
+				comandos.add(Integer.toString(configuracion.getWatermark().getPosWatermark()));
+
 				comandos.add("--pos-text-watermark");
 
 				comandos.add(Integer.toString(configuracion.getWatermark().getPos()));
 
 				comandos.add("--color-watermark-text");
 
-				comandos.add(configuracion.getWatermark().getColor().getColor().toString());
+				comandos.add(JMthos.colorToHex(configuracion.getWatermark().getColor().getColor()));
 
 				comandos.add("-font-size-text-watermark");
 
@@ -363,12 +391,6 @@ public class DisplayFrame extends JFrame {
 
 	}
 
-	public void setCropSize(Point cropSize) {
-
-		this.cropSize = cropSize;
-
-	}
-
 	private void ponerTiempo(boolean primerTiempo) {
 
 		if (!JVideoPlayer.getListView().getList().isEmpty()) {
@@ -400,6 +422,22 @@ public class DisplayFrame extends JFrame {
 					panel_2.getTime1().setValor(0f);
 
 				}
+
+			}
+
+		}
+
+		else {
+
+			if (primerTiempo) {
+
+				panel_2.getTime1().setValor(0f);
+
+			}
+
+			else {
+
+				panel_2.getTime2().setValor(0f);
 
 			}
 
@@ -485,16 +523,51 @@ public class DisplayFrame extends JFrame {
 
 	}
 
+	public void conversion() {
+
+		if (btnNewButton_2.isSelected()) {
+
+			for (int i = 0; i < JVideoPlayer.getListView().getList().size(); i++) {
+
+				PlayListFrame.indice = i;
+
+				convertir();
+
+			}
+
+		}
+
+		else {
+
+			convertir();
+
+		}
+
+	}
+
 	public void convertir() {
 
-		if (panel_2.getTime2().getValor() > 0f) {
+		try {
 
-			try {
+			alerta.setSize(600, 350);
+
+			alerta.setFuente(getFont().deriveFont(40f));
+
+			listaComprobacion = JVideoPlayer.getListView().getList();
+
+			if (listaComprobacion.isEmpty()) {
+
+				alerta.mensaje("Por favor, reproduzca un vídeo", AlertType.WARNING, 0, "");
+
+			}
+
+			else {
 
 				btnNewButton_4.setEnabled(false);
 
-				String archivo = JVideoPlayer.getListView().getMap()
-						.get(JVideoPlayer.getListView().getList().get(PlayListFrame.indice));
+				// mirar indice
+
+				String archivo = JVideoPlayer.getListView().getMap().get(listaComprobacion.get(PlayListFrame.indice));
 
 				comandos.clear();
 
@@ -502,22 +575,61 @@ public class DisplayFrame extends JFrame {
 
 				comandos.add(archivo);
 
-				comandos.add("-ss");
+				if (chckbxNewCheckBox.isSelected()) {
 
-				comandos.add(Float.toString(panel_2.getTime1().getValor()));
+					comandos.add("-ss");
 
-				comandos.add("-t");
+					comandos.add("0");
 
-				comandos.add(Float.toString(panel_2.getTime2().getValor()));
+					comandos.add("-t");
+
+					comandos.add("");
+
+				}
+
+				else {
+
+					comandos.add("-ss");
+
+					comandos.add(Float.toString(panel_2.getTime1().getValor()));
+
+					comandos.add("-t");
+
+					float valor = panel_2.getTime2().getValor();
+
+					if (valor == 0f) {
+
+						comandos.add("");
+
+					}
+
+					else {
+
+						comandos.add(Float.toString(valor));
+
+					}
+
+				}
 
 				saberComandos(archivo);
 
 				comandos.add("-y");
 
+				String extension = "gif";
+
+				if (DisplayFrame.configuracion != null && configuracion.getAjustes() != null
+						&& !configuracion.getAjustes().getExtension().getText().trim().isEmpty()) {
+
+					extension = configuracion.getAjustes().getExtension().getText().trim();
+
+					extension = extension.replace(".", "");
+
+				}
+
 				if (configuracion == null) {
 
-					comandos.add(
-							archivo.substring(0, archivo.lastIndexOf(".")) + "_" + Metodos.saberFechaActual() + ".gif");
+					comandos.add(archivo.substring(0, archivo.lastIndexOf(".")) + "_" + Metodos.saberFechaActual() + "."
+							+ extension);
 
 				}
 
@@ -526,33 +638,44 @@ public class DisplayFrame extends JFrame {
 					if (configuracion.getAjustes().getOutput().getFile().isEmpty()) {
 
 						comandos.add(archivo.substring(0, archivo.lastIndexOf(".")) + "_" + Metodos.saberFechaActual()
-								+ "." + configuracion.getAjustes().getExtension().getText());
+								+ "." + extension);
 
 					}
 
 					else {
 
-						comandos.add(configuracion.getAjustes().getOutput().getFile()
-								+ archivo.substring(archivo.lastIndexOf(JMthos.saberSeparador()) + 1,
-										archivo.lastIndexOf("."))
-								+ "_" + Metodos.saberFechaActual() + "."
-								+ configuracion.getAjustes().getExtension().getText());
+						comandos.add(
+								configuracion.getAjustes().getOutput().getFile()
+										+ archivo.substring(archivo.lastIndexOf(JMthos.saberSeparador()) + 1,
+												archivo.lastIndexOf("."))
+										+ "_" + Metodos.saberFechaActual() + "." + extension);
 
 					}
 
 				}
 
-				JFfmpeg conversion;
+				JFfmpeg conversion = null;
 
 				if (configuracion != null) {
+					System.out.println("AAAAA-------------------------------------------------");
+					System.out.println(comandos);
+					System.out.println("AAAAA-------------------------------------------------");
 
-					conversion = new JFfmpeg(comandos.toArray(new String[0]),
-							configuracion.getAjustes().getPlayFile().isSelected());
+					if (btnNewButton_2.isSelected()) {
 
-					if (configuracion.getAjustes().getOpenFolder().isSelected()) {
+					}
 
-						JMthos.abrirCarpeta(comandos.getLast().substring(0,
-								comandos.getLast().lastIndexOf(JMthos.saberSeparador())));
+					else {
+
+						conversion = new JFfmpeg(comandos.toArray(new String[0]),
+								configuracion.getAjustes().getPlayFile().isSelected());
+
+						if (configuracion.getAjustes().getOpenFolder().isSelected()) {
+
+							JMthos.abrir(comandos.getLast().substring(0,
+									comandos.getLast().lastIndexOf(JMthos.saberSeparador())));
+
+						}
 
 					}
 
@@ -560,7 +683,39 @@ public class DisplayFrame extends JFrame {
 
 				else {
 
-					conversion = new JFfmpeg(comandos.toArray(new String[0]), true);
+					System.out.println("BBBB-------------------------------------------------");
+
+					System.out.println(comandos);
+
+					System.out.println("BBBB-------------------------------------------------");
+
+					if (btnNewButton_2.isSelected()) {
+
+						ArrayList<String> historialReproductor = ListHistory.readHistory();
+
+						Map<String, String> mapa = JVideoPlayer.getListView().getMap();
+
+						for (int i = 0; i < historialReproductor.size(); i++) {
+
+							System.out.println("aaa " + comandos.getLast());
+
+							if (i > 0) {
+
+								comandos.set(1, mapa.get(historialReproductor.get(i)));
+
+							}
+
+							conversion = new JFfmpeg(comandos.toArray(new String[0]), true);
+
+						}
+
+					}
+
+					else {
+
+						conversion = new JFfmpeg(comandos.toArray(new String[0]), true);
+
+					}
 
 				}
 
@@ -568,21 +723,125 @@ public class DisplayFrame extends JFrame {
 
 				String dbName = JMthos.directorioActual() + "db" + JMthos.saberSeparador() + "video_gif.db";
 
-				System.out.println(conversion.getOutput());
+				boolean perfil = false;
+
+				int idPerfil = 0;
+
+				if (configuracion != null) {
+
+					perfil = configuracion.getPerfiles().getUsarPerfil().isSelected();
+
+				}
+
+				if (perfil) {
+
+				}
+
+				ArrayList<String> columnas = new ArrayList<>();
+
+				ArrayList<String> valores = new ArrayList<>();
+
+				columnas.add("PERFIL");
+
+				columnas.add("CONVERSION");
+
+				columnas.add("ORIGEN");
+
+				columnas.add("COMANDO");
+
+				valores.add(Integer.toString(idPerfil));
+
+				valores.add(comandos.getLast());
+
+				valores.add(archivo);
+
+				valores.add(conversion.getOutput());
+
+				insertSQLite(dbName, "CONVERSIONES", columnas, valores);
+
+				alerta.mensaje("Conversion realizada", AlertType.INFO, 0, "");
 
 			}
 
-			catch (Exception e1) {
+		}
 
-				e1.printStackTrace();
+		catch (Exception e1) {
+
+			e1.printStackTrace();
+
+		}
+
+	}
+
+	public static ArrayList<String> selectSQlite(String dbName, String query, List<String> columns) {
+
+		String url = "jdbc:sqlite:" + dbName;
+
+		ArrayList<String> resultados = new ArrayList<>();
+
+		try {
+
+			Class.forName("org.sqlite.JDBC");
+
+			Connection connection = DriverManager.getConnection(url);
+
+			Statement statement = connection.createStatement();
+
+			ResultSet resultSet = statement.executeQuery(query);
+
+			while (resultSet.next()) {
+
+				for (int i = 0; i < columns.size(); i++) {
+
+					resultados.add(resultSet.getString(columns.get(i)));
+
+				}
 
 			}
+
+			resultSet.close();
+
+			statement.close();
+
+			connection.close();
+
+		}
+
+		catch (Exception e) {
+
+		}
+
+		return resultados;
+
+	}
+
+	public static void insertSQLite(String db, String table, List<String> columns, List<String> values) {
+
+		try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + db);
+
+				PreparedStatement pstmt = conn
+						.prepareStatement("INSERT INTO " + table + " (" + String.join(",", columns) + ") VALUES ("
+								+ values.stream().map(v -> "?").collect(Collectors.joining(",")) + ")")) {
+
+			for (int i = 0; i < values.size(); i++) {
+
+				pstmt.setString(i + 1, values.get(i));
+
+			}
+
+			pstmt.executeUpdate();
+
+		}
+
+		catch (SQLException e) {
 
 		}
 
 	}
 
 	public DisplayFrame() throws TooManyListenersException {
+
+		alerta = new PopupAlerts(600, 200);
 
 		comandos = new LinkedList<>();
 
@@ -727,18 +986,6 @@ public class DisplayFrame extends JFrame {
 
 		mnFile.add(mntmOpenSubtitle);
 
-		btnNewButton_4 = new NButton("Convert");
-
-		btnNewButton_4.setBackground(Color.WHITE);
-
-		btnNewButton_4.setFont(new Font("Tahoma", Font.PLAIN, 16));
-
-		btnNewButton_4.setContentAreaFilled(false);
-
-		btnNewButton_4.setBorder(null);
-
-		btnNewButton_4.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/video_2_frame.png")));
-
 		mntmNewMenuItem_1 = new JMenuItem("Config");
 
 		mntmNewMenuItem_1.setBackground(Color.WHITE);
@@ -768,18 +1015,6 @@ public class DisplayFrame extends JFrame {
 		});
 
 		mntmNewMenuItem_1.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/settings.png")));
-
-		btnNewButton_4.addActionListener(new ActionListener() {
-
-			@Override
-
-			public void actionPerformed(ActionEvent e) {
-
-				convertir();
-
-			}
-
-		});
 
 		mntmOpenVideo.addActionListener(new ActionListener() {
 
@@ -1307,41 +1542,69 @@ public class DisplayFrame extends JFrame {
 
 				ponerTiempo(false);
 
+				ponerTiempo(false);
+
 			}
 
 		});
 
 		menuBar.add(panel_2);
 
-		panel_8.add(btnNewButton_4);
+		chckbxNewCheckBox = new CheckBoxCustom("ALL");
 
-		btnNewButton_2 = new NButton("Convert All");
+		chckbxNewCheckBox.setLeft(40);
+
+		chckbxNewCheckBox.setPosition(new Point(65, 35));
+
+		chckbxNewCheckBox.setFont(new Font("Tahoma", Font.PLAIN, 15));
+
+		chckbxNewCheckBox.setBackground(Color.LIGHT_GRAY);
+
+		chckbxNewCheckBox.setHorizontalAlignment(SwingConstants.CENTER);
+
+		panel_8.add(chckbxNewCheckBox);
+
+		btnNewButton_2 = new CheckBoxCustom("Convert All");
+
+		btnNewButton_2.setPosition(new Point(65, 36));
+
+		btnNewButton_2.setLeft(40);
+
+		btnNewButton_2.setFocusPainted(false);
 
 		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		btnNewButton_2.setText("Bulk");
 
-		btnNewButton_2.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/bulk.png")));
+		btnNewButton_2.setBackground(Color.LIGHT_GRAY);
 
-		btnNewButton_2.setBackground(Color.WHITE);
+		panel_8.add(btnNewButton_2);
 
-		btnNewButton_2.addActionListener(new ActionListener() {
+		btnNewButton_4 = new NButton("Convert");
+
+		btnNewButton_4.setBackground(Color.WHITE);
+
+		btnNewButton_4.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
+		btnNewButton_4.setContentAreaFilled(false);
+
+		btnNewButton_4.setBorder(null);
+
+		btnNewButton_4.setIcon(new ImageIcon(DisplayFrame.class.getResource("/images/video_2_frame.png")));
+
+		btnNewButton_4.addActionListener(new ActionListener() {
+
+			@Override
 
 			public void actionPerformed(ActionEvent e) {
 
-				for (int i = 0; i < JVideoPlayer.getListView().getList().size(); i++) {
-
-					PlayListFrame.indice = i;
-
-					convertir();
-
-				}
+				convertir();
 
 			}
 
 		});
 
-		panel_8.add(btnNewButton_2);
+		panel_8.add(btnNewButton_4);
 
 		panel_8.add(mntmNewMenuItem_1);
 

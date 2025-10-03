@@ -11,6 +11,8 @@ import com.checkbox.CheckBoxCustom;
 import com.comboBox.comboSuggestion.ComboBoxSuggestion;
 import com.layout.MaterialPanelLayout;
 
+@SuppressWarnings("serial")
+
 public class Bn extends JPanel {
 
 	private CheckBoxCustom chckbxNewCheckBox;
@@ -48,6 +50,8 @@ public class Bn extends JPanel {
 		comboBox.addItem("Solo el texo");
 
 		comboBox.addItem("Solo la marca de agua");
+
+		comboBox.setCenteredText();
 
 		ArrayList<JComponent> lista = new ArrayList<>();
 

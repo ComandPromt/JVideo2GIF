@@ -32,7 +32,7 @@ public class Hq extends JPanel {
 
 		label.setHorizontalAlignment(SwingConstants.CENTER);
 
-		chckbxNewCheckBox = new CheckBoxCustom("Hq");
+		chckbxNewCheckBox = new CheckBoxCustom("HQ");
 
 		chckbxNewCheckBox.sumarAlto(-13);
 

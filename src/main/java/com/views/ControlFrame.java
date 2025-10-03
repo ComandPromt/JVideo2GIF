@@ -64,6 +64,7 @@ public class ControlFrame extends JFrame {
 		setBounds(100, 100, 623, 66);
 
 		contentPane = new JPanel();
+
 		contentPane.setBackground(Color.WHITE);
 
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -73,6 +74,7 @@ public class ControlFrame extends JFrame {
 		setContentPane(contentPane);
 
 		JPanel panel = new JPanel();
+
 		panel.setBackground(Color.WHITE);
 
 		contentPane.add(panel, BorderLayout.CENTER);

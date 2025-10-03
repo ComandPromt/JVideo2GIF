@@ -34,7 +34,7 @@ public class Reverse extends JPanel {
 
 		chckbxNewCheckBox = new CheckBoxCustom("Reverse");
 
-		chckbxNewCheckBox.sumarAlto(-13);
+		chckbxNewCheckBox.sumarAlto(-2);
 
 		add(label);
 

@@ -51,7 +51,7 @@ public class PostText extends JPanel {
 
 	}
 
-	public PostText() {
+	public PostText(String texto, boolean check, boolean mostrarText) {
 
 		textPosition = new PosicionText();
 
@@ -67,30 +67,34 @@ public class PostText extends JPanel {
 
 		watermark.sumarAlto(3);
 
-		watermark.setLeft(300);
+		watermark.setLeft(390);
 
 		ArrayList<JComponent> lista = new ArrayList<>();
 
-		JPanel a = new JPanel();
+		if (check) {
 
-		a.setBackground(Color.WHITE);
+			JPanel a = new JPanel();
 
-		a.setLayout(new GridLayout());
+			a.setBackground(Color.WHITE);
 
-		a.add(watermark);
+			a.setLayout(new GridLayout());
 
-		lista.add(a);
+			a.add(watermark);
 
-		JLabel text = new JLabel("                                  Text Position");
+			lista.add(a);
 
-		text.setBackground(Color.WHITE);
+		}
+		if (mostrarText) {
+			JLabel text = new JLabel(texto);
 
-		text.setFont(new Font("Arial", Font.PLAIN, 20));
+			text.setBackground(Color.WHITE);
 
-		lista.add(new JSeparator());
+			text.setFont(new Font("Arial", Font.PLAIN, 20));
 
-		lista.add(text);
+			lista.add(new JSeparator());
 
+			lista.add(text);
+		}
 		lista.add(textPosition);
 
 		ArrayList<Integer> porcentajes = new ArrayList<>();

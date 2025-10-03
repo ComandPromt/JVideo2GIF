@@ -22,9 +22,11 @@ import com.jmenu.horizontal.HorizontalMenu;
 import com.main.VideoViewer;
 import com.views.panels.Ajustes;
 import com.views.panels.Blur;
+import com.views.panels.Codec;
 import com.views.panels.Effects;
 import com.views.panels.Historial;
 import com.views.panels.Perfiles;
+import com.views.panels.Quality;
 import com.views.panels.Watermark;
 import com.views.panels.effects.CropPanel;
 
@@ -51,6 +53,20 @@ public class Config extends javax.swing.JFrame {
 	private Perfiles perfiles;
 
 	private Historial historial;
+
+	private Quality quality;
+
+	private Codec codec;
+
+	public Codec getCodec() {
+		return codec;
+	}
+
+	public Quality getQuality() {
+
+		return quality;
+
+	}
 
 	public Perfiles getPerfiles() {
 
@@ -108,6 +124,8 @@ public class Config extends javax.swing.JFrame {
 
 		initComponents();
 
+		setResizable(true);
+
 		setVisible(true);
 
 		try {
@@ -164,11 +182,15 @@ public class Config extends javax.swing.JFrame {
 
 		lista.add("Watermark");
 
+		lista.add("Codecs");
+
+		lista.add("HQ");
+
 		lista.add("Historial");
 
 		lista.add("Perfiles");
 
-		lista.add("Ajustes");
+		lista.add("Output");
 
 		ArrayList<JComponent> component = new ArrayList<>();
 
@@ -188,11 +210,19 @@ public class Config extends javax.swing.JFrame {
 
 		historial = new Historial();
 
+		quality = new Quality();
+
+		codec = new Codec();
+
 		component.add(efectos);
 
 		component.add(crop);
 
 		component.add(watermark);
+
+		component.add(codec);
+
+		component.add(quality);
 
 		component.add(historial);
 
@@ -212,7 +242,7 @@ public class Config extends javax.swing.JFrame {
 
 		getContentPane().add(panel);
 
-		setSize(new Dimension(731, 729));
+		setSize(new Dimension(850, 730));
 
 		setLocationRelativeTo(null);
 

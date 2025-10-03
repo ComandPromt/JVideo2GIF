@@ -330,6 +330,7 @@ public class PlayListFrame extends JFrame {
 		scrollPane.setViewportView(getList());
 
 		panel = new JPanel();
+
 		panel.setBackground(Color.WHITE);
 
 		contentPane.add(panel, BorderLayout.NORTH);
@@ -337,6 +338,7 @@ public class PlayListFrame extends JFrame {
 		panel.setLayout(new BorderLayout(0, 0));
 
 		panel_1 = new JPanel();
+
 		panel_1.setBackground(Color.WHITE);
 
 		panel.add(panel_1, BorderLayout.WEST);
@@ -344,6 +346,7 @@ public class PlayListFrame extends JFrame {
 		panel_1.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 		searchField = new JTextField();
+
 		searchField.setHorizontalAlignment(SwingConstants.CENTER);
 
 		searchField.addKeyListener(new KeyAdapter() {
@@ -390,13 +393,19 @@ public class PlayListFrame extends JFrame {
 		panel_1.add(searchButton);
 
 		historyClearButton = new JButton("");
+
 		historyClearButton.addActionListener(new ActionListener() {
+
 			@Override
+
 			public void actionPerformed(ActionEvent e) {
+
 				jButton1ActionPerformed(e);
 
 			}
+
 		});
+
 		historyClearButton.setContentAreaFilled(false);
 
 		historyClearButton.setBorder(null);
@@ -406,8 +415,9 @@ public class PlayListFrame extends JFrame {
 		panel_1.add(historyClearButton);
 
 		DragAndDrop btnNewButton = new DragAndDrop("");
+		btnNewButton.setAltura(0);
 
-		btnNewButton.setText("Drag And Drop Here");
+		btnNewButton.setText(" Drag And Drop Here ");
 
 		btnNewButton.setBackground(Color.WHITE);
 
